@@ -13,9 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeArrayAndTimer('quickSort', generateArray());
 
     bubbleSortButton.addEventListener('click', async () => {
-        const array = generateArray(); // Use generateArray directly
+        const array = generateArray(); 
         console.log("Bubble Sort started:", array);
-        await bubbleSort(array); // Pass a copy of the array
+        await bubbleSort(array); 
         renderArray(array, document.querySelector('#bubbleSortArrayContainer')); // Display the sorted array in the bubble sort container
     });
     
@@ -63,7 +63,7 @@ function generateArray(){
 
 
 function renderArray(arr, container) {
-    container.innerHTML = ''; // Clear the container
+    container.innerHTML = ''; 
     arr.forEach(item => {
         const arrayItem = document.createElement('div');
         arrayItem.className = 'array-item';
@@ -77,7 +77,7 @@ async function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function swap(arr, i, j) {
+async function swapBubbleSort(arr, i, j) {
     const temp = arr[i];
     arr[i] = arr[j];
     arr[j] = temp;
@@ -113,8 +113,6 @@ async function swap(arr, i, j) {
     arrayItems[j].style.transform = '';
 }
 
-
-
 async function bubbleSort(arr) {
     const start = Date.now(); // Record start time
     const len = arr.length;
@@ -131,7 +129,7 @@ async function bubbleSort(arr) {
             document.querySelectorAll('.array-item')[i + 1].classList.add('compare');
 
             if (arr[i] > arr[i + 1]) {
-                await swap(arr, i, i + 1);
+                await swapBubbleSort(arr, i, i + 1);
                 swapped = true;
             }
             // Wait for the animation to finish
