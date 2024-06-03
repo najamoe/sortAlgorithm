@@ -16,35 +16,35 @@ document.addEventListener('DOMContentLoaded', () => {
         const array = generateArray(); 
         console.log("Bubble Sort started:", array);
         await bubbleSort(array); 
-        renderArray(array, document.querySelector('#bubbleSortArrayContainer')); // Display the sorted array in the bubble sort container
+        renderArray(array, document.querySelector('#bubbleSortArrayContainer')); 
     });
     
     insertionSortButton.addEventListener('click', async () => {
-        const array = generateArray(); // Use generateArray directly
+        const array = generateArray(); 
         console.log("Insertion Sort started:", array);
-        await insertionSort(array); // Pass a copy of the array
-        renderArray(array, document.querySelector('#insertionSortArrayContainer')); // Display the sorted array in the insertion sort container
+        await insertionSort(array); 
+        renderArray(array, document.querySelector('#insertionSortArrayContainer'));
     });
     
     mergeSortButton.addEventListener('click', async () => {
-        const array = generateArray(); // Use generateArray directly
+        const array = generateArray(); 
         console.log("Merge Sort started:", array);
         
-        const start = performance.now(); // Record start time
-        const sortedArray = await mergeSort(array); // Perform merge sort
-        const end = performance.now(); // Record end time
+        const start = performance.now(); 
+        const sortedArray = await mergeSort(array); 
+        const end = performance.now(); 
         
-        renderArray(sortedArray, document.querySelector('#mergeSortArrayContainer')); // Render the sorted array
+        renderArray(sortedArray, document.querySelector('#mergeSortArrayContainer')); 
         
-        const elapsedTime = (end - start) / 1000; // Calculate elapsed time in seconds
-        document.getElementById('mergeSortTimer').textContent = `Time: ${elapsedTime.toFixed(2)}s`; // Update timer display
+        const elapsedTime = (end - start) / 1000; 
+        document.getElementById('mergeSortTimer').textContent = `Time: ${elapsedTime.toFixed(2)}s`; 
     });
     
     quickSortButton.addEventListener('click', async () => {
-        const array = generateArray(); // Use generateArray directly
+        const array = generateArray(); 
         console.log("Quick Sort started:", array);
-        await quickSort(array); // Pass a copy of the array
-        renderArray(array, document.querySelector('#quickSortArrayContainer')); // Display the sorted array in the quick sort container
+        await quickSort(array);
+        renderArray(array, document.querySelector('#quickSortArrayContainer')); 
     });
     
 });
@@ -53,8 +53,8 @@ function initializeArrayAndTimer(sortingAlgorithm, array) {
     const arrayContainer = document.querySelector(`#${sortingAlgorithm}ArrayContainer`);
     const timerElement = document.querySelector(`#${sortingAlgorithm}Timer`);
     
-    renderArray(array, arrayContainer); // Display the array
-    timerElement.textContent = 'Time: 0.00s'; // Initialize timer display
+    renderArray(array, arrayContainer); 
+    timerElement.textContent = 'Time: 0.00s'; 
 }
 
 function generateArray(){
