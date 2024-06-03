@@ -20,8 +20,8 @@
 
 /*bubbleSorter*/
 .compare {
-    background-color: yellow; /* Change the background color to highlight the elements */
-    border-color: red; /* Change the border color */
+    background-color: rgba(255, 255, 6, 0.937); /* Change the background color to highlight the elements */
+    border-color: rgb(175, 12, 12); /* Change the border color */
     color: black; /* Change the text color */
     font-weight: bold; /* Make the text bold */
 }
