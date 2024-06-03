@@ -6,7 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const mergeSortButton = document.querySelector('.mergeSortStartButton');
     const quickSortButton = document.querySelector('.quickSortStartButton');
 
-    const originalArray = generateArray(); // Store the original array
+    // Initialize the array and timer elements for each algorithm
+    initializeArrayAndTimer('bubbleSort', generateArray());
+    initializeArrayAndTimer('insertionSort', generateArray());
+    initializeArrayAndTimer('mergeSort', generateArray());
+    initializeArrayAndTimer('quickSort', generateArray());
 
     bubbleSortButton.addEventListener('click', async () => {
         const array = originalArray.slice(); // Create a copy of the original array
@@ -44,16 +48,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+function initializeArrayAndTimer(sortingAlgorithm, array) {
+    const arrayContainer = document.querySelector(`#${sortingAlgorithm}ArrayContainer`);
+    const timerElement = document.querySelector(`#${sortingAlgorithm}Timer`);
+    
+    renderArray(array, arrayContainer); // Display the array
+    timerElement.textContent = 'Time: 0.00s'; // Initialize timer display
+}
+
 function generateArray(){
     return [5, 9, 12, 7, 14, 21, 43, 35, 3];
 }
 
-function sortedArrayManually(){
-    return [3, 5, 7, 9, 12, 14, 21, 35, 43]
-}
 
 function renderArray(arr, container) {
-    console.log("Rendering array:", arr);
     container.innerHTML = ''; // Clear the container
     arr.forEach(item => {
         const arrayItem = document.createElement('div');
@@ -63,9 +71,6 @@ function renderArray(arr, container) {
     });
 }
 
-const realarrayContainer = document.getElementById('realarray');
-const sortedArray = sortedArrayManually(); // Generate the array
-renderArray(sortedArray, realarrayContainer); // Render the array inside the realarray container
 
 async function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));

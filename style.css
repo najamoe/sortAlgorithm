@@ -4,3 +4,13 @@
     justify-content: center;
 }
 
+.swap-animation {
+    animation: swap 0.3s ease-in-out; /* Example animation */
+}
+
+@keyframes swap {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
