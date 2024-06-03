@@ -186,9 +186,9 @@ async function mergeSort(arr) {
         return arr;
     }
     const middle = Math.floor(arr.length / 2);
-    const left = await mergeSort(arr.slice(0, middle));
-    const right = await mergeSort(arr.slice(middle));
-    return merge(left, right);
+    const left = mergeSort(arr.slice(0, middle));
+    const right = mergeSort(arr.slice(middle));
+    return merge(await left, await right);
 }
 
 async function merge(left, right) {
@@ -196,6 +196,7 @@ async function merge(left, right) {
     let leftIndex = 0;
     let rightIndex = 0;
     while (leftIndex < left.length && rightIndex < right.length) {
+        await renderMergeState(left, right, leftIndex, rightIndex);
         if (left[leftIndex] < right[rightIndex]) {
             result.push(left[leftIndex]);
             leftIndex++;
@@ -206,6 +207,14 @@ async function merge(left, right) {
     }
     return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
 }
+
+async function renderMergeState(left, right, leftIndex, rightIndex) {
+    const container = document.querySelector('#mergeSortArrayContainer');
+    const mergedArray = left.slice(0, leftIndex).concat(right.slice(0, rightIndex)).concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
+    renderArray(mergedArray, container);
+    await sleep(300);
+}
+
 
 async function quickSort(arr, left = 0, right = arr.length - 1) {
     const start = Date.now();
