@@ -23,10 +23,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     mergeSortButton.addEventListener('click', async () => {
-        const array = originalArray.slice(); // Create a copy of the original array
+        const array = generateArray(); // Create the original array
         console.log("Merge Sort started:", array);
-        await mergeSort(array); // Pass a copy of the array
-        renderArray(array, document.querySelector('#mergeSortArrayContainer')); // Display the sorted array in the merge sort container
+        
+        const start = performance.now(); // Record start time
+        const sortedArray = await mergeSort(array); // Perform merge sort
+        const end = performance.now(); // Record end time
+        
+        renderArray(sortedArray, document.querySelector('#mergeSortArrayContainer')); // Render the sorted array
+        
+        const elapsedTime = (end - start) / 1000; // Calculate elapsed time in seconds
+        document.getElementById('mergeSortTimer').textContent = `Time: ${elapsedTime.toFixed(2)}s`; // Update timer display
     });
 
     quickSortButton.addEventListener('click', async () => {
@@ -92,39 +99,46 @@ async function bubbleSort(arr) {
 }
 
 async function insertionSort(arr) {
-    const start = Date.now();
+    const startTime = performance.now(); // Record start time with high precision
     console.log("Insertion Sort started:", arr);
+    
     for (let i = 1; i < arr.length; i++) {
         let current = arr[i];
         let j = i - 1;
         console.log("Current element:", current);
+        
         while (j >= 0 && arr[j] > current) {
             arr[j + 1] = arr[j];
             j--;
         }
+        
         arr[j + 1] = current;
         console.log("Array after iteration", i, ":", arr);
     }
-    const end = Date.now(); // Record end time
-    const elapsedSeconds = (end - start) / 1000; // Calculate elapsed seconds
-    document.getElementById('insertionSortTimer').textContent = `Time: ${elapsedSeconds.toFixed(2)}s`; // Update timer display
+    
+    const endTime = performance.now(); // Record end time with high precision
+    const elapsedTime = endTime - startTime;
+
+    let timeString;
+    if (elapsedTime >= 1000) {
+        const seconds = elapsedTime / 1000;
+        timeString = `${seconds.toFixed(2)}s`; // Display time in seconds
+    } else {
+        timeString = `${elapsedTime.toFixed(2)}ms`; // Display time in milliseconds
+    }
+
+    document.getElementById('insertionSortTimer').textContent = `Time: ${timeString}`; // Update timer display
     console.log("Insertion Sort finished:", arr);
 }
 
 async function mergeSort(arr) {
-    const start = Date.now();
     if (arr.length <= 1) {
         return arr;
     }
     const middle = Math.floor(arr.length / 2);
     const left = await mergeSort(arr.slice(0, middle));
     const right = await mergeSort(arr.slice(middle));
-    const result = await merge(left, right);
-    console.log("Merge Sort finished:", result);
-    const end = Date.now(); // Record end time
-    const elapsedSeconds = (end - start) / 1000; // Calculate elapsed seconds
-    document.getElementById('bubblmergeSortTimereSortTimer').textContent = `Time: ${elapsedSeconds.toFixed(2)}s`; // Update timer display
-    return result ;
+    return merge(left, right);
 }
 
 async function merge(left, right) {
