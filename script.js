@@ -241,8 +241,15 @@ async function quickSort(arr, left = 0, right = arr.length - 1, arrayContainer, 
 }
 
 async function partition(arr, left, right, arrayContainer, timerElement) {
-    let pivot = arr[right];
+    // Choose a random pivot index within the partition range
+    const pivotIndex = Math.floor(Math.random() * (right - left + 1)) + left;
+    
+    // Swap the pivot element with the rightmost element
+    [arr[pivotIndex], arr[right]] = [arr[right], arr[pivotIndex]];
+
+    let pivot = arr[right]; // Pivot is now the last element of the partition
     let i = left - 1;
+
     for (let j = left; j < right; j++) {
         if (arr[j] <= pivot) {
             i++;
@@ -253,6 +260,7 @@ async function partition(arr, left, right, arrayContainer, timerElement) {
     renderArray(arr, arrayContainer);
     return i + 1;
 }
+
 
 
 async function swapQuickSort(arr, i, j, arrayContainer, sortingAlgorithm) {
@@ -283,15 +291,6 @@ async function animatePartition(arr, pivotIndex, left, right, arrayContainer, ti
     // Highlight the pivot element
     arrayItems[pivotIndex].classList.add('pivot');
 
-    // Create a temporary text element for the pivot label
-    const pivotLabel = document.createElement('div');
-    pivotLabel.textContent = 'Pivot';
-    pivotLabel.classList.add('pivot-label');
-
-    // Position the pivot label above the pivot element
-    const pivotElement = arrayItems[pivotIndex];
-    pivotElement.parentNode.insertBefore(pivotLabel, pivotElement);
-
     // Highlight the elements being compared
     arrayItems[left].classList.add('quickCompare');
     arrayItems[right].classList.add('quickCompare');
@@ -299,16 +298,14 @@ async function animatePartition(arr, pivotIndex, left, right, arrayContainer, ti
     // Wait for a short duration to visualize the partitioning
     await sleep(1000);
 
-    // Remove highlighting and pivot label after visualization
+    // Remove highlighting after visualization
     arrayItems[pivotIndex].classList.remove('pivot');
-    if (pivotLabel && pivotLabel.parentNode) {
-        pivotLabel.parentNode.removeChild(pivotLabel);
-    }
     arrayItems[left].classList.remove('quickCompare');
     arrayItems[right].classList.remove('quickCompare');
 
     renderArray(arr, arrayContainer);
 }
+
 
 
 

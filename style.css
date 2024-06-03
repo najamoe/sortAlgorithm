@@ -60,11 +60,13 @@
     margin-bottom: 10px;
 }
 
-#quickSort .array-container-quick {
+.array-container-quick {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+   
 }
+
 
 #quickSort .array-item {
     margin-right: 5px;
@@ -73,10 +75,19 @@
     border: 1px solid black;
 }
 
-#quickSort .quickCompare {
-    background-color: rgba(255, 255, 6, 0.937);
-    border-color: rgb(175, 12, 12);
+/* CSS for Quick Sort visualization */
+
+.quickCompare {
+    background-color: rgba(255, 255, 0, 0.5); /* Yellow with some transparency */
+    border-color: rgb(175, 12, 12); /* Red border */
     color: black;
+    font-weight: bold;
+}
+
+.pivot {
+    background-color: rgba(255, 0, 0, 0.5); /* Red with some transparency */
+    border-color: black;
+    color: white; /* White text for better visibility */
     font-weight: bold;
 }
 
@@ -84,18 +95,8 @@
     animation: quickSwap 0.3s ease-in-out;
 }
 
-#quickSort .pivot-label {
-    position: absolute;
-    top: -20px; /* Adjust as needed */
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: white;
-    border: 1px solid black;
-    padding: 5px;
-    border-radius: 5px;
-    font-weight: bold;
-    z-index: 1; /* Ensure it's displayed above the array */
-}
+
+
 
 
 @keyframes quickSwap {
