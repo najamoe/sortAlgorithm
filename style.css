@@ -42,3 +42,70 @@
     50% { transform: scale(1.2); }
     100% { transform: scale(1); }
 }
+
+/*quickSort*/
+
+#quickSort {
+    border: 2px solid black;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+#quickSort h2 {
+    margin-top: 0;
+}
+
+#quickSort button {
+    margin-bottom: 10px;
+}
+
+#quickSort .array-container-quick {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#quickSort .array-item {
+    margin-right: 5px;
+    display: inline-block;
+    padding: 5px;
+    border: 1px solid black;
+}
+
+#quickSort .quickCompare {
+    background-color: rgba(255, 255, 6, 0.937);
+    border-color: rgb(175, 12, 12);
+    color: black;
+    font-weight: bold;
+}
+
+#quickSort .quick-swap-animation {
+    animation: quickSwap 0.3s ease-in-out;
+}
+
+#quickSort .pivot-label {
+    position: absolute;
+    top: -20px; /* Adjust as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    border: 1px solid black;
+    padding: 5px;
+    border-radius: 5px;
+    font-weight: bold;
+    z-index: 1; /* Ensure it's displayed above the array */
+}
+
+
+@keyframes quickSwap {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}

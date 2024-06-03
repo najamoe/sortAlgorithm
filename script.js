@@ -283,21 +283,32 @@ async function animatePartition(arr, pivotIndex, left, right, arrayContainer, ti
     // Highlight the pivot element
     arrayItems[pivotIndex].classList.add('pivot');
 
+    // Create a temporary text element for the pivot label
+    const pivotLabel = document.createElement('div');
+    pivotLabel.textContent = 'Pivot';
+    pivotLabel.classList.add('pivot-label');
+
+    // Position the pivot label above the pivot element
+    const pivotElement = arrayItems[pivotIndex];
+    pivotElement.parentNode.insertBefore(pivotLabel, pivotElement);
+
     // Highlight the elements being compared
-    for (let i = left; i <= right; i++) {
-        arrayItems[i].classList.add('quickCompare');
-    }
+    arrayItems[left].classList.add('quickCompare');
+    arrayItems[right].classList.add('quickCompare');
 
     // Wait for a short duration to visualize the partitioning
-    await sleep(500);
+    await sleep(1000);
 
-    // Remove highlighting after visualization
+    // Remove highlighting and pivot label after visualization
     arrayItems[pivotIndex].classList.remove('pivot');
-    for (let i = left; i <= right; i++) {
-        arrayItems[i].classList.remove('quickCompare');
+    if (pivotLabel && pivotLabel.parentNode) {
+        pivotLabel.parentNode.removeChild(pivotLabel);
     }
+    arrayItems[left].classList.remove('quickCompare');
+    arrayItems[right].classList.remove('quickCompare');
 
     renderArray(arr, arrayContainer);
-   
 }
+
+
 
