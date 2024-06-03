@@ -13,21 +13,21 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeArrayAndTimer('quickSort', generateArray());
 
     bubbleSortButton.addEventListener('click', async () => {
-        const array = originalArray.slice(); // Create a copy of the original array
+        const array = generateArray(); // Use generateArray directly
         console.log("Bubble Sort started:", array);
         await bubbleSort(array); // Pass a copy of the array
         renderArray(array, document.querySelector('#bubbleSortArrayContainer')); // Display the sorted array in the bubble sort container
     });
-
+    
     insertionSortButton.addEventListener('click', async () => {
-        const array = originalArray.slice(); // Create a copy of the original array
+        const array = generateArray(); // Use generateArray directly
         console.log("Insertion Sort started:", array);
         await insertionSort(array); // Pass a copy of the array
         renderArray(array, document.querySelector('#insertionSortArrayContainer')); // Display the sorted array in the insertion sort container
     });
-
+    
     mergeSortButton.addEventListener('click', async () => {
-        const array = generateArray(); // Create the original array
+        const array = generateArray(); // Use generateArray directly
         console.log("Merge Sort started:", array);
         
         const start = performance.now(); // Record start time
@@ -39,13 +39,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const elapsedTime = (end - start) / 1000; // Calculate elapsed time in seconds
         document.getElementById('mergeSortTimer').textContent = `Time: ${elapsedTime.toFixed(2)}s`; // Update timer display
     });
-
+    
     quickSortButton.addEventListener('click', async () => {
-        const array = originalArray.slice(); // Create a copy of the original array
+        const array = generateArray(); // Use generateArray directly
         console.log("Quick Sort started:", array);
         await quickSort(array); // Pass a copy of the array
         renderArray(array, document.querySelector('#quickSortArrayContainer')); // Display the sorted array in the quick sort container
     });
+    
 });
 
 function initializeArrayAndTimer(sortingAlgorithm, array) {
@@ -77,11 +78,42 @@ async function sleep(ms) {
 }
 
 async function swap(arr, i, j) {
-    await sleep(300); // Adjust speed here for visualization
     const temp = arr[i];
     arr[i] = arr[j];
     arr[j] = temp;
+
+    // Get the array item elements
+    const arrayItems = document.querySelectorAll('.array-item');
+
+    // Get the positions of the array items being swapped
+    const rect1 = arrayItems[i].getBoundingClientRect();
+    const rect2 = arrayItems[j].getBoundingClientRect();
+
+    // Calculate the distance to move the array items
+    const deltaX = rect2.left - rect1.left;
+    const deltaY = rect2.top - rect1.top;
+
+    // Animate the movement of array items
+    arrayItems[i].style.transition = 'transform 0.3s ease-in-out';
+    arrayItems[j].style.transition = 'transform 0.3s ease-in-out';
+    arrayItems[i].style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+    arrayItems[j].style.transform = `translate(-${deltaX}px, -${deltaY}px)`;
+
+    // Wait for the animation to finish
+    await sleep(300);
+
+    // Update the text content of the array items
+    arrayItems[i].textContent = arr[i];
+    arrayItems[j].textContent = arr[j];
+
+    // Reset the transform property
+    arrayItems[i].style.transition = '';
+    arrayItems[j].style.transition = '';
+    arrayItems[i].style.transform = '';
+    arrayItems[j].style.transform = '';
 }
+
+
 
 async function bubbleSort(arr) {
     const start = Date.now(); // Record start time
@@ -91,17 +123,32 @@ async function bubbleSort(arr) {
     do {
         swapped = false;
         for (let i = 0; i < len - 1; i++) {
+            // Remove highlighting from previous comparison
+            document.querySelectorAll('.array-item').forEach(item => item.classList.remove('compare'));
+
+            // Highlight the elements being compared
+            document.querySelectorAll('.array-item')[i].classList.add('compare');
+            document.querySelectorAll('.array-item')[i + 1].classList.add('compare');
+
             if (arr[i] > arr[i + 1]) {
                 await swap(arr, i, i + 1);
                 swapped = true;
             }
+            // Wait for the animation to finish
+            await sleep(300);
         }
     } while (swapped);
+    
     const end = Date.now(); // Record end time
     const elapsedSeconds = (end - start) / 1000; // Calculate elapsed seconds
     document.getElementById('bubbleSortTimer').textContent = `Time: ${elapsedSeconds.toFixed(2)}s`; // Update timer display
     console.log("Bubble Sort finished:", arr);
+
+    // Remove highlighting after sorting is complete
+    document.querySelectorAll('.array-item').forEach(item => item.classList.remove('compare'));
 }
+
+
 
 async function insertionSort(arr) {
     const startTime = performance.now(); // Record start time with high precision
