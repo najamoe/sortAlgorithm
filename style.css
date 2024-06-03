@@ -1,5 +1,5 @@
 .sorting-container {
-    border: 3px solid black;
+    border: 2px solid black;
     padding: 10px;
     border-radius: 10px;
     margin-bottom: 20px;
@@ -19,11 +19,18 @@
 }
 
 /*bubbleSorter*/
-.compare {
-    background-color: rgba(255, 255, 6, 0.937); /* Change the background color to highlight the elements */
-    border-color: rgb(175, 12, 12); /* Change the border color */
-    color: black; /* Change the text color */
-    font-weight: bold; /* Make the text bold */
+.bubbleCompare {
+    background-color: rgba(255, 255, 6, 0.937); 
+    border-color: rgb(175, 12, 12); 
+    color: black; 
+    font-weight: bold; 
+}
+
+.quickCompare {
+    background-color: rgba(255, 255, 6, 0.937); 
+    border-color: rgb(175, 12, 12); 
+    color: black; 
+    font-weight: bold; 
 }
 
 .swap-animation {

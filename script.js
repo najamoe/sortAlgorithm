@@ -41,11 +41,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     quickSortButton.addEventListener('click', async () => {
+        const arrayContainer = document.querySelector('#quickSortArrayContainer');
+        const timerElement = document.querySelector('#quickSortTimer');
         const array = generateArray(); 
         console.log("Quick Sort started:", array);
-        await quickSort(array);
-        renderArray(array, document.querySelector('#quickSortArrayContainer')); 
+        const startTime = performance.now();
+        await quickSort(array, 0, array.length - 1, arrayContainer, timerElement);
+        console.log("Quick Sort finished:", array);
     });
+    
+    
     
 });
 
@@ -56,6 +61,7 @@ function initializeArrayAndTimer(sortingAlgorithm, array) {
     renderArray(array, arrayContainer); 
     timerElement.textContent = 'Time: 0.00s'; 
 }
+
 
 function generateArray(){
     return [5, 9, 12, 7, 14, 21, 43, 35, 3];
@@ -73,6 +79,8 @@ function renderArray(arr, container) {
 }
 
 
+
+
 async function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -85,13 +93,16 @@ async function swapBubbleSort(arr, i, j) {
     // Get the array item elements
     const arrayItems = document.querySelectorAll('.array-item');
 
-    // Get the positions of the array items being swapped
-    const rect1 = arrayItems[i].getBoundingClientRect();
-    const rect2 = arrayItems[j].getBoundingClientRect();
+    // Add class for bubble sort animation
+    arrayItems[i].classList.add('bubble-swap-animation');
+    arrayItems[j].classList.add('bubble-swap-animation');
+
+    // Wait for a short duration to allow for the animation to start
+    await sleep(50);
 
     // Calculate the distance to move the array items
-    const deltaX = rect2.left - rect1.left;
-    const deltaY = rect2.top - rect1.top;
+    const deltaX = arrayItems[j].offsetLeft - arrayItems[i].offsetLeft;
+    const deltaY = arrayItems[j].offsetTop - arrayItems[i].offsetTop;
 
     // Animate the movement of array items
     arrayItems[i].style.transition = 'transform 0.3s ease-in-out';
@@ -102,19 +113,21 @@ async function swapBubbleSort(arr, i, j) {
     // Wait for the animation to finish
     await sleep(300);
 
-    // Update the text content of the array items
-    arrayItems[i].textContent = arr[i];
-    arrayItems[j].textContent = arr[j];
+    // Swap the text content of array items
+    [arrayItems[i].textContent, arrayItems[j].textContent] = [arrayItems[j].textContent, arrayItems[i].textContent];
 
-    // Reset the transform property
+    // Reset styles and remove class for bubble sort animation
     arrayItems[i].style.transition = '';
     arrayItems[j].style.transition = '';
     arrayItems[i].style.transform = '';
     arrayItems[j].style.transform = '';
+    arrayItems[i].classList.remove('bubble-swap-animation');
+    arrayItems[j].classList.remove('bubble-swap-animation');
 }
 
+
 async function bubbleSort(arr) {
-    const start = Date.now(); // Record start time
+    const start = Date.now(); 
     const len = arr.length;
     let swapped;
 
@@ -122,11 +135,11 @@ async function bubbleSort(arr) {
         swapped = false;
         for (let i = 0; i < len - 1; i++) {
             // Remove highlighting from previous comparison
-            document.querySelectorAll('.array-item').forEach(item => item.classList.remove('compare'));
+            document.querySelectorAll('.array-item').forEach(item => item.classList.remove('bubbleCompare'));
 
             // Highlight the elements being compared
-            document.querySelectorAll('.array-item')[i].classList.add('compare');
-            document.querySelectorAll('.array-item')[i + 1].classList.add('compare');
+            document.querySelectorAll('.array-item')[i].classList.add('bubbleCompare');
+            document.querySelectorAll('.array-item')[i + 1].classList.add('bubbleCompare');
 
             if (arr[i] > arr[i + 1]) {
                 await swapBubbleSort(arr, i, i + 1);
@@ -145,8 +158,6 @@ async function bubbleSort(arr) {
     // Remove highlighting after sorting is complete
     document.querySelectorAll('.array-item').forEach(item => item.classList.remove('compare'));
 }
-
-
 
 async function insertionSort(arr) {
     const startTime = performance.now(); // Record start time with high precision
@@ -216,28 +227,77 @@ async function renderMergeState(left, right, leftIndex, rightIndex) {
 }
 
 
-async function quickSort(arr, left = 0, right = arr.length - 1) {
-    const start = Date.now();
+async function quickSort(arr, left = 0, right = arr.length - 1, arrayContainer, timerElement) {
+    const start = Date.now(); // Record start time
     if (left < right) {
-        let pivotIndex = await partition(arr, left, right);
-        await quickSort(arr, left, pivotIndex - 1);
-        await quickSort(arr, pivotIndex + 1, right);
+        let pivotIndex = await partition(arr, left, right, arrayContainer, timerElement);
+        await animatePartition(arr, pivotIndex, left, right, arrayContainer, timerElement);
+        await quickSort(arr, left, pivotIndex - 1, arrayContainer, timerElement);
+        await quickSort(arr, pivotIndex + 1, right, arrayContainer, timerElement);
     }
-    console.log("Quick Sort finished:", arr);
     const end = Date.now(); // Record end time
     const elapsedSeconds = (end - start) / 1000; // Calculate elapsed seconds
-    document.getElementById('quickSortTimer').textContent = `Time: ${elapsedSeconds.toFixed(2)}s`; // Update timer display
+    timerElement.textContent = `Time: ${elapsedSeconds.toFixed(2)}s`; // Update timer display
 }
 
-async function partition(arr, left, right) {
+async function partition(arr, left, right, arrayContainer, timerElement) {
     let pivot = arr[right];
     let i = left - 1;
     for (let j = left; j < right; j++) {
         if (arr[j] <= pivot) {
             i++;
-            await swap(arr, i, j);
+            await swapQuickSort(arr, i, j, arrayContainer);
         }
     }
-    await swap(arr, i + 1, right);
+    await swapQuickSort(arr, i + 1, right, arrayContainer);
+    renderArray(arr, arrayContainer);
     return i + 1;
 }
+
+
+async function swapQuickSort(arr, i, j, arrayContainer, sortingAlgorithm) {
+    const arrayItems = arrayContainer.children;
+    const temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+
+    // Swap the text content of array items
+    arrayItems[i].textContent = arr[i];
+    arrayItems[j].textContent = arr[j];
+
+    // Add swap animation class
+    arrayItems[i].classList.add('quick-swap-animation');
+    arrayItems[j].classList.add('quick-swap-animation');
+
+    // Wait for the animation to finish
+    await sleep(300);
+
+    // Remove swap animation class
+    arrayItems[i].classList.remove('quick-swap-animation');
+    arrayItems[j].classList.remove('quick-swap-animation');
+}
+
+async function animatePartition(arr, pivotIndex, left, right, arrayContainer, timerElement) {
+    const arrayItems = arrayContainer.children;
+
+    // Highlight the pivot element
+    arrayItems[pivotIndex].classList.add('pivot');
+
+    // Highlight the elements being compared
+    for (let i = left; i <= right; i++) {
+        arrayItems[i].classList.add('quickCompare');
+    }
+
+    // Wait for a short duration to visualize the partitioning
+    await sleep(500);
+
+    // Remove highlighting after visualization
+    arrayItems[pivotIndex].classList.remove('pivot');
+    for (let i = left; i <= right; i++) {
+        arrayItems[i].classList.remove('quickCompare');
+    }
+
+    renderArray(arr, arrayContainer);
+   
+}
+
