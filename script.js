@@ -5,10 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const insertionSortButton = document.querySelector('.insertionSortStartButton');
     const mergeSortButton = document.querySelector('.mergeSortStartButton');
     const quickSortButton = document.querySelector('.quickSortStartButton');
+    const slowInsertionSortButton = document.querySelector('.insertionSortSlowStartButton')
 
     // Initialize the array and timer elements for each algorithm
     initializeArrayAndTimer('bubbleSort', generateArray());
     initializeArrayAndTimer('insertionSort', generateArray());
+    initializeArrayAndTimer('insertionSortSlow', generateArray());
     initializeArrayAndTimer('mergeSort', generateArray());
     initializeArrayAndTimer('quickSort', generateArray());
 
@@ -20,9 +22,15 @@ document.addEventListener('DOMContentLoaded', () => {
     
     insertionSortButton.addEventListener('click', async () => {
         const array = generateArray(); 
-        console.log("Insertion Sort started:", array);
         await insertionSort(array); 
         renderArray(array, document.querySelector('#insertionSortArrayContainer'));
+    });
+
+    slowInsertionSortButton.addEventListener('click', async () => {
+        const array = generateArray(); 
+        console.log("Insertion Sort started:", array);
+        await insertionSortSlow(array); 
+        renderArray(array, document.querySelector('#insertionSortSlowArrayContainer'));
     });
     
     mergeSortButton.addEventListener('click', async () => {
@@ -53,12 +61,27 @@ document.addEventListener('DOMContentLoaded', () => {
     
 });
 
-function initializeArrayAndTimer(sortingAlgorithm, array) {
+function initializeArrayAndTimer(sortingAlgorithm, array, slow = false) {
     const arrayContainer = document.querySelector(`#${sortingAlgorithm}ArrayContainer`);
     const timerElement = document.querySelector(`#${sortingAlgorithm}Timer`);
     
     renderArray(array, arrayContainer); 
     timerElement.textContent = 'Time: 0.00s'; 
+
+    if (slow) {
+        const slowArrayContainer = document.createElement('div');
+        slowArrayContainer.className = 'array-container';
+        slowArrayContainer.id = `${sortingAlgorithm}SlowArrayContainer`;
+        document.getElementById(sortingAlgorithm).appendChild(slowArrayContainer);
+
+        const slowTimerElement = document.createElement('div');
+        slowTimerElement.className = 'timer';
+        slowTimerElement.id = `${sortingAlgorithm}SlowTimer`;
+        document.getElementById(sortingAlgorithm).appendChild(slowTimerElement);
+
+        renderArray(array, slowArrayContainer); 
+        slowTimerElement.textContent = 'Time: 0.00s'; 
+    }
 }
 
 
@@ -160,8 +183,7 @@ async function bubbleSort(arr) {
 }
 
 async function insertionSort(arr) {
-    const startTime = performance.now(); // Record start time with high precision
-    console.log("Insertion Sort started:", arr);
+    const startTime = performance.now(); 
     
     for (let i = 1; i < arr.length; i++) {
         let current = arr[i];
@@ -177,20 +199,52 @@ async function insertionSort(arr) {
         console.log("Array after iteration", i, ":", arr);
     }
     
-    const endTime = performance.now(); // Record end time with high precision
+    const endTime = performance.now(); 
     const elapsedTime = endTime - startTime;
 
     let timeString;
     if (elapsedTime >= 1000) {
         const seconds = elapsedTime / 1000;
-        timeString = `${seconds.toFixed(2)}s`; // Display time in seconds
+        timeString = `${seconds.toFixed(2)}s`; 
     } else {
-        timeString = `${elapsedTime.toFixed(2)}ms`; // Display time in milliseconds
+        timeString = `${elapsedTime.toFixed(2)}ms`;
     }
 
-    document.getElementById('insertionSortTimer').textContent = `Time: ${timeString}`; // Update timer display
-    console.log("Insertion Sort finished:", arr);
+    document.getElementById('insertionSortTimer').textContent = `Time: ${timeString}`; 
 }
+
+async function insertionSortSlow(arr) {
+    const startTime = performance.now(); 
+    
+    for (let i = 1; i < arr.length; i++) {
+        let current = arr[i];
+        let j = i - 1;
+        console.log("Current element:", current);
+        
+        while (j >= 0 && arr[j] > current) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        await sleep(1000)
+        arr[j + 1] = current;
+        console.log("Array after iteration", i, ":", arr);
+    }
+    
+    const endTime = performance.now(); 
+    const elapsedTime = endTime - startTime;
+
+    let timeString;
+    if (elapsedTime >= 1000) {
+        const seconds = elapsedTime / 1000;
+        timeString = `${seconds.toFixed(2)}s`; 
+    } else {
+        timeString = `${elapsedTime.toFixed(2)}ms`;
+    }
+
+    document.getElementById('insertionSortSlowTimer').textContent = `Time: ${timeString}`; 
+    
+}
+
 
 async function mergeSort(arr) {
     if (arr.length <= 1) {
