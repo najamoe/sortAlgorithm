@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     bubbleSortButton.addEventListener('click', async () => {
         const array = generateArray(); 
-        console.log("Bubble Sort started:", array);
         await bubbleSort(array); 
         renderArray(array, document.querySelector('#bubbleSortArrayContainer')); 
     });
@@ -85,11 +84,7 @@ async function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function swapBubbleSort(arr, i, j) {
-    const temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
-
+async function swapAnimationBubbleSort(i, j) {
     // Get the array item elements
     const arrayItems = document.querySelectorAll('.array-item');
 
@@ -125,38 +120,43 @@ async function swapBubbleSort(arr, i, j) {
     arrayItems[j].classList.remove('bubble-swap-animation');
 }
 
-
 async function bubbleSort(arr) {
-    const start = Date.now(); 
+    const start = Date.now();
     const len = arr.length;
     let swapped;
 
-    do {
+    const arrayItems = document.querySelectorAll('.array-item');
+
+    for (let i = 0; i < len - 1; i++) {
         swapped = false;
-        for (let i = 0; i < len - 1; i++) {
-            // Remove highlighting from previous comparison
-            document.querySelectorAll('.array-item').forEach(item => item.classList.remove('bubbleCompare'));
+        for (let j = 0; j < len - 1 - i; j++) {
+            arrayItems.forEach(item => item.classList.remove('bubbleCompare'));
 
-            // Highlight the elements being compared
-            document.querySelectorAll('.array-item')[i].classList.add('bubbleCompare');
-            document.querySelectorAll('.array-item')[i + 1].classList.add('bubbleCompare');
+            arrayItems[j].classList.add('bubbleCompare');
+            arrayItems[j + 1].classList.add('bubbleCompare');
 
-            if (arr[i] > arr[i + 1]) {
-                await swapBubbleSort(arr, i, i + 1);
+            if (arr[j] > arr[j + 1]) {
+                const temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+
+                await swapAnimationBubbleSort(j, j + 1);
                 swapped = true;
             }
-            // Wait for the animation to finish
             await sleep(300);
         }
-    } while (swapped);
-    
-    const end = Date.now(); // Record end time
-    const elapsedSeconds = (end - start) / 1000; // Calculate elapsed seconds
-    document.getElementById('bubbleSortTimer').textContent = `Time: ${elapsedSeconds.toFixed(2)}s`; // Update timer display
-    console.log("Bubble Sort finished:", arr);
+        arrayItems[len - 1 - i].classList.add('bubbleSorted');
 
-    // Remove highlighting after sorting is complete
-    document.querySelectorAll('.array-item').forEach(item => item.classList.remove('compare'));
+        if (!swapped) break;
+    }
+
+    for (let i = 0; i < len; i++) {
+        arrayItems[i].classList.add('bubbleSorted');
+    }
+
+    const end = Date.now();
+    const elapsedSeconds = (end - start) / 1000;
+    document.getElementById('bubbleSortTimer').textContent = `Time: ${elapsedSeconds.toFixed(2)}s`;
 }
 
 async function insertionSort(arr) {

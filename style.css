@@ -4,6 +4,21 @@
     border-radius: 10px;
     margin-bottom: 20px;
 }
+#bubbleSort {
+    background-color: lightblue;
+}
+
+#insertionSort {
+    background-color: lightgreen;
+}
+
+#mergeSort {
+    background-color: lightcoral;
+}
+
+#quickSort {
+    background-color: lightgoldenrodyellow;
+}
 
 .array-container {
     display: flex;
@@ -26,12 +41,12 @@
     font-weight: bold; 
 }
 
-.quickCompare {
-    background-color: rgba(255, 255, 6, 0.937); 
-    border-color: rgb(175, 12, 12); 
-    color: black; 
-    font-weight: bold; 
+.bubbleSorted {
+    background-color: green;
+    color: white;
+    font-weight: bold;
 }
+
 
 .swap-animation {
     animation: swap 0.3s ease-in-out;
@@ -44,6 +59,12 @@
 }
 
 /*quickSort*/
+.quickCompare {
+    background-color: rgba(255, 255, 6, 0.937); 
+    border-color: rgb(175, 12, 12); 
+    color: black; 
+    font-weight: bold; 
+}
 
 #quickSort {
     border: 2px solid black;
