@@ -125,3 +125,20 @@
         transform: scale(1);
     }
 }
+
+/* InsertionSort */
+
+
+.insertion-slow-highlight {
+    background-color: yellow;
+}
+
+
+.insertion-slow-move {
+    transition: transform 1s ease-in-out;
+}
+
+
+.insertion-slow-sorted {
+    background-color: lightgreen;
+}

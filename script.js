@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     slowInsertionSortButton.addEventListener('click', async () => {
         const array = generateArray(); 
-        console.log("Insertion Sort started:", array);
         await insertionSortSlow(array); 
         renderArray(array, document.querySelector('#insertionSortSlowArrayContainer'));
     });
@@ -109,7 +108,7 @@ async function sleep(ms) {
 
 async function swapAnimationBubbleSort(i, j) {
     // Get the array item elements
-    const arrayItems = document.querySelectorAll('.array-item');
+    const arrayItems = document.querySelectorAll('.bubble-sort-array .array-item');
 
     // Add class for bubble sort animation
     arrayItems[i].classList.add('bubble-swap-animation');
@@ -215,21 +214,45 @@ async function insertionSort(arr) {
 
 async function insertionSortSlow(arr) {
     const startTime = performance.now(); 
-    
+
+    const arrayItems = document.querySelectorAll('.insertion-sort-slow-array .array-item');
+
     for (let i = 1; i < arr.length; i++) {
         let current = arr[i];
         let j = i - 1;
-        console.log("Current element:", current);
-        
+
+        // Highlight the current element in yellow
+        arrayItems[i].classList.add('insertion-slow-highlight');
+
         while (j >= 0 && arr[j] > current) {
+            // Move the current element visually to the left
+            arrayItems[j].classList.add('insertion-slow-move');
+            await sleep(50);
+
+            // Move the current element in the array to the right
             arr[j + 1] = arr[j];
             j--;
+
+            // Update the visual representation of the array after moving
+            renderArray(arr, document.querySelector('#insertionSortSlowArrayContainer'));
         }
-        await sleep(1000)
+
+        // Wait for a short duration before placing the current element in its correct position
+        await sleep(1000);
+
+        // Place the current element in its correct position in the array
         arr[j + 1] = current;
-        console.log("Array after iteration", i, ":", arr);
+
+        // Remove highlighting and move animation classes from elements
+        arrayItems.forEach(item => item.classList.remove('insertion-slow-highlight', 'insertion-slow-move'));
+
+        // Update the visual representation of the array
+        renderArray(arr, document.querySelector('#insertionSortSlowArrayContainer'));
     }
-    
+
+    // Highlight the entire sorted array in green
+    arrayItems.forEach(item => item.classList.add('insertion-slow-sorted'));
+
     const endTime = performance.now(); 
     const elapsedTime = endTime - startTime;
 
@@ -242,8 +265,8 @@ async function insertionSortSlow(arr) {
     }
 
     document.getElementById('insertionSortSlowTimer').textContent = `Time: ${timeString}`; 
-    
 }
+
 
 
 async function mergeSort(arr) {
