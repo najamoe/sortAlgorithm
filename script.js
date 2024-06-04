@@ -213,60 +213,76 @@ async function insertionSort(arr) {
 }
 
 async function insertionSortSlow(arr) {
-    const startTime = performance.now(); 
-
-    const arrayItems = document.querySelectorAll('.insertion-sort-slow-array .array-item');
+    const startTime = performance.now();
+    const arrayContainer = document.getElementById('insertionSortSlowArrayContainer');
 
     for (let i = 1; i < arr.length; i++) {
         let current = arr[i];
         let j = i - 1;
+        let currentIndex = i;
 
-        // Highlight the current element in yellow
-        arrayItems[i].classList.add('insertion-slow-highlight');
+        // Highlight the current element being compared
+        arrayContainer.children[currentIndex].classList.add('current-element');
+
+        // Lift the current element visually
+        arrayContainer.children[currentIndex].classList.add('lifted');
+        await sleep(300); // Add a short delay for animation
 
         while (j >= 0 && arr[j] > current) {
-            // Move the current element visually to the left
-            arrayItems[j].classList.add('insertion-slow-move');
-            await sleep(50);
+            // Move the elements visually
+            arrayContainer.children[j].style.transform = `translateX(${arrayContainer.children[currentIndex].offsetWidth}px)`;
+            await sleep(300); // Add a short delay for animation
 
-            // Move the current element in the array to the right
+            // Swap the elements in the array
             arr[j + 1] = arr[j];
+
+            // Move the visual representation to the left
+            arrayContainer.insertBefore(arrayContainer.children[currentIndex], arrayContainer.children[j]);
+
             j--;
 
-            // Update the visual representation of the array after moving
-            renderArray(arr, document.querySelector('#insertionSortSlowArrayContainer'));
+            // Add animation delay
+            await sleep(300);
         }
-
-        // Wait for a short duration before placing the current element in its correct position
-        await sleep(1000);
 
         // Place the current element in its correct position in the array
         arr[j + 1] = current;
 
-        // Remove highlighting and move animation classes from elements
-        arrayItems.forEach(item => item.classList.remove('insertion-slow-highlight', 'insertion-slow-move'));
+        // Move the current element visually to its correct position
+        arrayContainer.children[currentIndex].style.transform = '';
 
-        // Update the visual representation of the array
-        renderArray(arr, document.querySelector('#insertionSortSlowArrayContainer'));
+        // Remove the lifted class to drop the element back down
+        arrayContainer.children[currentIndex].classList.remove('lifted');
+
+        // Remove the current element highlight
+        arrayContainer.children[currentIndex].classList.remove('current-element');
+
+        // Update the width of the array container dynamically based on the number of elements
+        arrayContainer.style.width = `${(arr.length + 2) * (arrayContainer.children[0].offsetWidth + 54)}px`; 
+
+        // Add animation delay
+        await sleep(300);
+
+        // Update the visual representation of the array after each iteration
+        renderArray(arr, arrayContainer);
+
+        // Add animation delay
+        await sleep(300);
     }
 
-    // Highlight the entire sorted array in green
-    arrayItems.forEach(item => item.classList.add('insertion-slow-sorted'));
-
-    const endTime = performance.now(); 
+    const endTime = performance.now();
     const elapsedTime = endTime - startTime;
 
     let timeString;
     if (elapsedTime >= 1000) {
         const seconds = elapsedTime / 1000;
-        timeString = `${seconds.toFixed(2)}s`; 
+        timeString = `${seconds.toFixed(2)}s`;
     } else {
         timeString = `${elapsedTime.toFixed(2)}ms`;
     }
 
-    document.getElementById('insertionSortSlowTimer').textContent = `Time: ${timeString}`; 
+    document.getElementById('insertionSortSlowTimer').textContent = `Time: ${timeString}`;
 }
-
 
 
 async function mergeSort(arr) {

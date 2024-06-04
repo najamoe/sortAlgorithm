@@ -27,10 +27,12 @@
 }
 
 .array-item {
-    margin-right: 5px; 
-    display: inline-block; 
-    padding: 5px; 
-    border: 1px solid black; 
+    flex: 0 0 auto;
+    transition: transform 0.3s ease-in-out;
+    margin: 5px; /* Adjust margin for spacing between array items */
+    padding: 5px;
+    border: 1px solid black;
+    box-sizing: border-box; /* Ensure padding and border are included in width calculation */
 }
 
 /*bubbleSorter*/
@@ -127,18 +129,18 @@
 }
 
 /* InsertionSort */
-
-
-.insertion-slow-highlight {
-    background-color: yellow;
+.current-element {
+    background-color: yellow; 
 }
 
-
-.insertion-slow-move {
-    transition: transform 1s ease-in-out;
+/* Animation for lifting the current element */
+.lifted {
+    transition: transform 0.3s ease-in-out; 
+    transform: translateY(-40px); /* Lift the element 30px above its original position */
 }
 
-
-.insertion-slow-sorted {
-    background-color: lightgreen;
+/* Animation for moving elements horizontally */
+.array-container .array-item {
+    transition: transform 0.3s ease-in-out; 
 }
+
