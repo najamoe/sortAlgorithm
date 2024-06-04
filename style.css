@@ -75,29 +75,23 @@
     border: 1px solid black;
 }
 
-/* CSS for Quick Sort visualization */
-
 .quickCompare {
-    background-color: rgba(255, 255, 0, 0.5); /* Yellow with some transparency */
-    border-color: rgb(175, 12, 12); /* Red border */
+    background-color: rgba(255, 255, 0, 0.5); 
+    border-color: rgb(175, 12, 12); 
     color: black;
     font-weight: bold;
 }
 
 .pivot {
-    background-color: rgba(255, 0, 0, 0.5); /* Red with some transparency */
+    background-color: rgba(255, 0, 0, 0.5); 
     border-color: black;
-    color: white; /* White text for better visibility */
+    color: white; 
     font-weight: bold;
 }
 
 #quickSort .quick-swap-animation {
     animation: quickSwap 0.3s ease-in-out;
 }
-
-
-
-
 
 @keyframes quickSwap {
     0% {
