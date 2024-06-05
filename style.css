@@ -222,19 +222,47 @@
     }
 }
 
-/* InsertionSort */
+#insertionSort {
+    background-color: lightyellow;
+    border: 2px solid black;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+#insertionSort h3 {
+    margin-top: 0;
+}
+
+#insertionSort button {
+    margin-bottom: 10px;
+}
+
+.array-container-insertion {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#insertionSort .array-item {
+    margin-right: 5px;
+    display: inline-block;
+    padding: 5px;
+    border: 1px solid black;
+}
+
 .current-element {
-    background-color: yellow; 
+    background-color: yellow;
 }
 
 /* Animation for lifting the current element */
 .lifted {
-    transition: transform 0.3s ease-in-out; 
+    transition: transform 0.3s ease-in-out;
     transform: translateY(-40px); /* Lift the element 30px above its original position */
 }
 
 /* Animation for moving elements horizontally */
-.array-container .array-item {
-    transition: transform 0.3s ease-in-out; 
+.array-container-insertion .array-item {
+    transition: transform 0.3s ease-in-out;
 }
 

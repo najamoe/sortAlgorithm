@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const modal = document.getElementById('sortingModal');
         modal.style.display = "block";
     
-        bubbleSort(array);
+        await bubbleSort(array);
     
         // Get the close button element
         const closeButton = document.querySelector('.close');
@@ -33,8 +33,19 @@ document.addEventListener('DOMContentLoaded', () => {
     
     insertionSortButton.addEventListener('click', async () => {
         const array = generateArray(); 
-        await insertionSort(array); 
         renderArray(array, document.querySelector('#insertionSortArrayContainer'));
+        const modal = document.getElementById('sortingModal');
+        modal.style.display = "block";
+        await insertionSort(array); 
+        // Get the close button element
+        const closeButton = document.querySelector('.close');
+    
+        // Add event listener to close the modal when the close button is clicked
+        closeButton.addEventListener('click', () => {
+            modal.style.display = "none";
+        });
+       
+
     });
 
     slowInsertionSortButton.addEventListener('click', async () => {
@@ -44,18 +55,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     mergeSortButton.addEventListener('click', async () => {
-        const array = generateArray(); 
-        console.log("Merge Sort started:", array);
-        
-        const start = performance.now(); 
-        const sortedArray = await mergeSort(array); 
-        const end = performance.now(); 
-        
-        renderArray(sortedArray, document.querySelector('#mergeSortArrayContainer')); 
-        
-        const elapsedTime = (end - start) / 1000; 
-        document.getElementById('mergeSortTimer').textContent = `Time: ${elapsedTime.toFixed(2)}s`; 
+        // Show the modal
+        const modal = document.getElementById('mergeSortModal');
+        modal.style.display = "block";
+    
+        const array = generateArray(); // Generate the array
+        const start = performance.now(); // Start measuring time
+        const sortedArray = await mergeSort(array); // Perform merge sort
+        const end = performance.now(); // End measuring time
+    
+        // Render the sorted array
+        renderArray(sortedArray, document.querySelector('#mergeSortArrayContainer'));
+    
+        // Calculate and display the elapsed time
+        const elapsedTime = (end - start) / 1000;
+        document.getElementById('mergeSortTimer').textContent = `Time: ${elapsedTime.toFixed(2)}s`;
+    
+        // Get the close button element
+        const closeButton = modal.querySelector('.close');
+    
+        // Add event listener to close the modal when the close button is clicked
+        closeButton.addEventListener('click', () => {
+            modal.style.display = "none";
+        });
     });
+    
+    
     
     quickSortButton.addEventListener('click', async () => {
         const arrayContainer = document.querySelector('#quickSortArrayContainer');

@@ -26,35 +26,52 @@
         </div>
     </div>
     
-    
-
     <div id="insertionSort" class="sorting-container">
         <h3>Insertion Sort</h3>
         <button class="insertionSortStartButton">Start Insertion Sort</button>
+        <div id="sortingModal" class="modal">
+            <div class="modal-content">
         <div class="array-container insertion-sort-array" id="insertionSortArrayContainer"></div>
         <div class="timer" id="insertionSortTimer"></div>
     </div>
+</div>
+</div>
 
     <div id="insertionSortSlow" class="sorting-container">
         <h3>Slow Insertion Sort</h3>
         <button class="insertionSortSlowStartButton">Start Slow Insertion Sort</button>
+        <div id="sortingModal" class="modal">
+            <div class="modal-content">
         <div class="array-container insertion-sort-slow-array" id="insertionSortSlowArrayContainer"></div>
         <div class="timer" id="insertionSortSlowTimer"></div>
     </div>
+</div>
+</div>
 
-    <div id="mergeSort" class="sorting-container">
-        <h3>Merge Sort</h3>
-        <button class="mergeSortStartButton">Start Merge Sort</button>
-        <div class="array-container" id="mergeSortArrayContainer"></div>
-        <div class="timer" id="mergeSortTimer"></div>
+<div id="mergeSort" class="sorting-container">
+    <h3>Merge Sort</h3>
+    <button class="mergeSortStartButton">Start Merge Sort</button>
+    <!-- Modal -->
+    <div class="modal" id="mergeSortModal">
+        <div class="modal-content">
+            <span class="close">&times;</span> <!-- Close button -->
+            <div class="array-container" id="mergeSortArrayContainer"></div>
+            <div class="timer" id="mergeSortTimer"></div>
+        </div>
     </div>
+</div>
+
 
     <div id="quickSort" class="sorting-container">
         <h3>Quick Sort</h3>
         <button class="quickSortStartButton">Start Quick Sort</button>
+        <div id="sortingModal" class="modal">
+            <div class="modal-content">
         <div class="array-container quick-sort-array" id="quickSortArrayContainer"></div>
         <div class="timer" id="quickSortTimer"></div>
     </div>
+</div>
+</div>
     
     <script src="script.js" type="module"></script>
 </body>
