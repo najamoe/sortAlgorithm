@@ -83,6 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     
     quickSortButton.addEventListener('click', async () => {
+        // Show the modal
+        const modal = document.getElementById('quickSortModal');
+        modal.style.display = "block";
+    
         const arrayContainer = document.querySelector('#quickSortArrayContainer');
         const timerElement = document.querySelector('#quickSortTimer');
         const array = generateArray(); 
@@ -90,7 +94,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const startTime = performance.now();
         await quickSort(array, 0, array.length - 1, arrayContainer, timerElement);
         console.log("Quick Sort finished:", array);
+    
+        // Get the close button element
+        const closeButton = modal.querySelector('.close');
+    
+        // Add event listener to close the modal when the close button is clicked
+        closeButton.addEventListener('click', () => {
+            modal.style.display = "none";
+        });
     });
+    
     
 });
 

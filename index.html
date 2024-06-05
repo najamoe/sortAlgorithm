@@ -61,17 +61,19 @@
     </div>
 </div>
 
-
-    <div id="quickSort" class="sorting-container">
-        <h3>Quick Sort</h3>
-        <button class="quickSortStartButton">Start Quick Sort</button>
-        <div id="sortingModal" class="modal">
-            <div class="modal-content">
-        <div class="array-container quick-sort-array" id="quickSortArrayContainer"></div>
-        <div class="timer" id="quickSortTimer"></div>
+<div id="quickSort" class="sorting-container">
+    <h3>Quick Sort</h3>
+    <button class="quickSortStartButton">Start Quick Sort</button>
+    <!-- Modal -->
+    <div class="modal" id="quickSortModal">
+        <div class="modal-content">
+            <span class="close">&times;</span> <!-- Close button -->
+            <div class="array-container quick-sort-array" id="quickSortArrayContainer"></div>
+            <div class="timer" id="quickSortTimer"></div>
+        </div>
     </div>
 </div>
-</div>
+
     
     <script src="script.js" type="module"></script>
 </body>
