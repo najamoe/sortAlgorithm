@@ -21,32 +21,50 @@ document.addEventListener('DOMContentLoaded', () => {
     
         await bubbleSort(array);
     
-        // Get the close button element
-        const closeButton = document.querySelector('.close');
-    
-        // Add event listener to close the modal when the close button is clicked
-        closeButton.addEventListener('click', () => {
+        // Add event listener to close the modal when clicking outside of it
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
             modal.style.display = "none";
-        });
+        }
+    });
     });
     
     
     insertionSortButton.addEventListener('click', async () => {
         const array = generateArray(); 
-        renderArray(array, document.querySelector('#insertionSortArrayContainer'));
-        const modal = document.getElementById('sortingModal');
-        modal.style.display = "block";
-        await insertionSort(array); 
-        // Get the close button element
-        const closeButton = document.querySelector('.close');
     
-        // Add event listener to close the modal when the close button is clicked
-        closeButton.addEventListener('click', () => {
+        // Display the initial array in the modal
+        renderArray(array, document.querySelector('#insertionSortArrayContainer'));
+        const modal = document.getElementById('insertionSortModal');
+        modal.style.display = "block";
+    
+        // Start measuring time
+        const startTime = performance.now(); 
+    
+        // Call the insertion sort function
+        await insertionSort(array); 
+    
+        // End measuring time
+        const endTime = performance.now(); 
+        const elapsedTime = endTime - startTime;
+    
+        // Display the sorted array in the modal
+        renderArray(array, document.querySelector('#insertionSortArrayContainer'));
+    
+        // Get the time element and update it with the elapsed time
+        const timeElement = document.getElementById('insertionSortTimer');
+        timeElement.textContent = `Time: ${elapsedTime.toFixed(2)}ms`; // Display the elapsed time in milliseconds
+    
+    // Add event listener to close the modal when clicking outside of it
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
             modal.style.display = "none";
-        });
-       
+        }
+    });
 
     });
+    
+    
 
     slowInsertionSortButton.addEventListener('click', async () => {
         const array = generateArray(); 
@@ -80,8 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     
-    
-    
     quickSortButton.addEventListener('click', async () => {
         // Show the modal
         const modal = document.getElementById('quickSortModal');
@@ -103,8 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.style.display = "none";
         });
     });
-    
-    
 });
 
 function initializeArrayAndTimer(sortingAlgorithm, array, slow = false) {
@@ -232,7 +246,6 @@ async function insertionSort(arr) {
     for (let i = 1; i < arr.length; i++) {
         let current = arr[i];
         let j = i - 1;
-        console.log("Current element:", current);
         
         while (j >= 0 && arr[j] > current) {
             arr[j + 1] = arr[j];
@@ -240,7 +253,6 @@ async function insertionSort(arr) {
         }
         
         arr[j + 1] = current;
-        console.log("Array after iteration", i, ":", arr);
     }
     
     const endTime = performance.now(); 
@@ -255,6 +267,7 @@ async function insertionSort(arr) {
     }
 
     document.getElementById('insertionSortTimer').textContent = `Time: ${timeString}`; 
+    renderArray(arr, document.querySelector('#insertionSortArrayContainer'));
 }
 
 async function insertionSortSlow(arr) {
