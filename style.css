@@ -1,19 +1,112 @@
+#Array {
+    background-color: #969696;
+    padding: 20px;
+    border: 1px solid #979393;
+    border-radius: 40px;
+    display: block;
+    width: 450px;
+    margin: 0 auto;
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+#Array h1 {
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+#Array h2 {
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    color: #333;
+}
+
+#Array h2 span {
+    border: 1px solid black;
+    padding: 12px;
+    border-radius: 100px;
+}
+
 .sorting-container {
+    display: block;
     border: 2px solid black;
     padding: 10px;
     border-radius: 10px;
     margin-bottom: 20px;
+    width: 800px;
+    text-align: center;
+    margin: 0 auto; 
 }
+
+.sorting-container h3 {
+    font-size: 20px;
+}
+.sorting-container button {
+    background-color: #686d68; 
+    border: none; 
+    color: white; 
+    padding: 10px 20px; 
+    text-align: center; 
+    text-decoration: none; 
+    display: inline-block; 
+    font-size: 14px; 
+    margin-bottom: 10px; 
+    border-radius: 10px; 
+}
+
+
+.sorting-container button:hover {
+    background-color: #4e9c57;
+    cursor: pointer; 
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
 #bubbleSort {
     background-color: lightblue;
 }
 
 #insertionSort {
-    background-color: lightgreen;
+    background-color: rgb(223, 250, 223);
 }
 
 #mergeSort {
-    background-color: lightcoral;
+    background-color: rgb(238, 161, 161);
 }
 
 #quickSort {
@@ -29,10 +122,11 @@
 .array-item {
     flex: 0 0 auto;
     transition: transform 0.3s ease-in-out;
-    margin: 5px; /* Adjust margin for spacing between array items */
-    padding: 5px;
+    margin: 5px;
     border: 1px solid black;
-    box-sizing: border-box; /* Ensure padding and border are included in width calculation */
+    box-sizing: border-box;
+    padding: 10px;
+    border-radius: 100px;
 }
 
 /*bubbleSorter*/

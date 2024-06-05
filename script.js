@@ -1,5 +1,3 @@
-'use strict';
-
 document.addEventListener('DOMContentLoaded', () => {
     const bubbleSortButton = document.querySelector('.bubbleSortStartButton');
     const insertionSortButton = document.querySelector('.insertionSortStartButton');
@@ -7,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const quickSortButton = document.querySelector('.quickSortStartButton');
     const slowInsertionSortButton = document.querySelector('.insertionSortSlowStartButton')
 
-    // Initialize the array and timer elements for each algorithm
     initializeArrayAndTimer('bubbleSort', generateArray());
     initializeArrayAndTimer('insertionSort', generateArray());
     initializeArrayAndTimer('insertionSortSlow', generateArray());
@@ -15,10 +12,24 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeArrayAndTimer('quickSort', generateArray());
 
     bubbleSortButton.addEventListener('click', async () => {
-        const array = generateArray(); 
-        await bubbleSort(array); 
-        renderArray(array, document.querySelector('#bubbleSortArrayContainer')); 
+        const array = generateArray();
+        renderArray(array, document.querySelector('#bubbleSortArrayContainer'));
+        
+        // Show the modal
+        const modal = document.getElementById('sortingModal');
+        modal.style.display = "block";
+    
+        bubbleSort(array);
+    
+        // Get the close button element
+        const closeButton = document.querySelector('.close');
+    
+        // Add event listener to close the modal when the close button is clicked
+        closeButton.addEventListener('click', () => {
+            modal.style.display = "none";
+        });
     });
+    
     
     insertionSortButton.addEventListener('click', async () => {
         const array = generateArray(); 
@@ -55,8 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
         await quickSort(array, 0, array.length - 1, arrayContainer, timerElement);
         console.log("Quick Sort finished:", array);
     });
-    
-    
     
 });
 
@@ -95,11 +104,9 @@ function renderArray(arr, container) {
         const arrayItem = document.createElement('div');
         arrayItem.className = 'array-item';
         arrayItem.textContent = item;
-        container.appendChild(arrayItem); // Append the array item to the specified container
+        container.appendChild(arrayItem); 
     });
 }
-
-
 
 
 async function sleep(ms) {
@@ -221,17 +228,16 @@ async function insertionSortSlow(arr) {
         let j = i - 1;
         let currentIndex = i;
 
-        // Highlight the current element being compared
         arrayContainer.children[currentIndex].classList.add('current-element');
 
-        // Lift the current element visually
+       
         arrayContainer.children[currentIndex].classList.add('lifted');
-        await sleep(300); // Add a short delay for animation
+        await sleep(300); 
 
         while (j >= 0 && arr[j] > current) {
-            // Move the elements visually
+            
             arrayContainer.children[j].style.transform = `translateX(${arrayContainer.children[currentIndex].offsetWidth}px)`;
-            await sleep(300); // Add a short delay for animation
+            await sleep(300); 
 
             // Swap the elements in the array
             arr[j + 1] = arr[j];
@@ -241,11 +247,11 @@ async function insertionSortSlow(arr) {
 
             j--;
 
-            // Add animation delay
+           
             await sleep(300);
         }
 
-        // Place the current element in its correct position in the array
+
         arr[j + 1] = current;
 
         // Move the current element visually to its correct position
@@ -260,7 +266,7 @@ async function insertionSortSlow(arr) {
         // Update the width of the array container dynamically based on the number of elements
         arrayContainer.style.width = `${(arr.length + 2) * (arrayContainer.children[0].offsetWidth + 54)}px`; 
 
-        // Add animation delay
+      
         await sleep(300);
 
         // Update the visual representation of the array after each iteration
