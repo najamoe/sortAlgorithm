@@ -21,49 +21,39 @@ document.addEventListener('DOMContentLoaded', () => {
     
         await bubbleSort(array);
     
-        // Add event listener to close the modal when clicking outside of it
-    window.addEventListener('click', (event) => {
+        window.addEventListener('click', (event) => {
         if (event.target === modal) {
             modal.style.display = "none";
         }
     });
     });
     
-    
     insertionSortButton.addEventListener('click', async () => {
         const array = generateArray(); 
     
-        // Display the initial array in the modal
         renderArray(array, document.querySelector('#insertionSortArrayContainer'));
         const modal = document.getElementById('insertionSortModal');
         modal.style.display = "block";
     
-        // Start measuring time
         const startTime = performance.now(); 
     
-        // Call the insertion sort function
         await insertionSort(array); 
     
-        // End measuring time
         const endTime = performance.now(); 
         const elapsedTime = endTime - startTime;
     
-        // Display the sorted array in the modal
         renderArray(array, document.querySelector('#insertionSortArrayContainer'));
     
-        // Get the time element and update it with the elapsed time
         const timeElement = document.getElementById('insertionSortTimer');
-        timeElement.textContent = `Time: ${elapsedTime.toFixed(2)}ms`; // Display the elapsed time in milliseconds
-    
-    // Add event listener to close the modal when clicking outside of it
-    window.addEventListener('click', (event) => {
+        timeElement.textContent = `Time: ${elapsedTime.toFixed(2)}ms`; 
+
+        window.addEventListener('click', (event) => {
         if (event.target === modal) {
             modal.style.display = "none";
         }
     });
 
     });
-    
     
     slowInsertionSortButton.addEventListener('click', async () => {
         const array = generateArray(); 
@@ -141,11 +131,9 @@ function initializeArrayAndTimer(sortingAlgorithm, array, slow = false) {
     }
 }
 
-
 function generateArray(){
     return [5, 9, 12, 7, 14, 21, 43, 35, 3];
 }
-
 
 function renderArray(arr, container) {
     container.innerHTML = ''; 
@@ -156,7 +144,6 @@ function renderArray(arr, container) {
         container.appendChild(arrayItem); 
     });
 }
-
 
 async function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -373,7 +360,6 @@ async function renderMergeState(left, right, leftIndex, rightIndex) {
     await sleep(300);
 }
 
-
 async function quickSort(arr, left = 0, right = arr.length - 1, arrayContainer, timerElement) {
     const start = Date.now(); // Record start time
     if (left < right) {
@@ -407,8 +393,6 @@ async function partition(arr, left, right, arrayContainer, timerElement) {
     renderArray(arr, arrayContainer);
     return i + 1;
 }
-
-
 
 async function swapQuickSort(arr, i, j, arrayContainer, sortingAlgorithm) {
     const arrayItems = arrayContainer.children;
