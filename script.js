@@ -65,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     
-
     slowInsertionSortButton.addEventListener('click', async () => {
         const array = generateArray(); 
         await insertionSortSlow(array); 
@@ -89,13 +88,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const elapsedTime = (end - start) / 1000;
         document.getElementById('mergeSortTimer').textContent = `Time: ${elapsedTime.toFixed(2)}s`;
     
-        // Get the close button element
-        const closeButton = modal.querySelector('.close');
-    
-        // Add event listener to close the modal when the close button is clicked
-        closeButton.addEventListener('click', () => {
+       // Add event listener to close the modal when clicking outside of it
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
             modal.style.display = "none";
-        });
+        }
+    });
     });
     
     quickSortButton.addEventListener('click', async () => {
@@ -111,13 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
         await quickSort(array, 0, array.length - 1, arrayContainer, timerElement);
         console.log("Quick Sort finished:", array);
     
-        // Get the close button element
-        const closeButton = modal.querySelector('.close');
-    
-        // Add event listener to close the modal when the close button is clicked
-        closeButton.addEventListener('click', () => {
+       // Add event listener to close the modal when clicking outside of it
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
             modal.style.display = "none";
-        });
+        }
+    });
     });
 });
 
