@@ -255,13 +255,11 @@
     background-color: yellow;
 }
 
-/* Animation for lifting the current element */
 .lifted {
     transition: transform 0.3s ease-in-out;
-    transform: translateY(-40px); /* Lift the element 30px above its original position */
+    transform: translateY(-40px); 
 }
 
-/* Animation for moving elements horizontally */
 .array-container-insertion .array-item {
     transition: transform 0.3s ease-in-out;
 }
