@@ -7,6 +7,6 @@ A visual representation of 4 different sorting algorithms.
 - Merge Sort
 - Quick Sort
 
-![Sorting Algorithms Visualization](https://github.com/dit-brugernavn/repo-navn/path-to-image.png)
+![Sorting Algorithms Visualization](images/site.png)
 
-[Try the visualization here](https://github.com/dit-brugernavn/repo-navn)
+[Try the visualization here](https://najamoe.github.io/sortAlgorithm/)
