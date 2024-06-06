@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const array = generateArray();
     renderArray(array, document.querySelector("#bubbleSortArrayContainer"));
 
-    // Show the modal
+    
     const modal = document.getElementById("sortingModal");
     modal.style.display = "block";
 
@@ -59,23 +59,18 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   slowInsertionSortButton.addEventListener("click", async () => {
-    console.log("Slow insertion sort button clicked!"); // Log when the button is clicked
     const array = generateArray();
     renderArray(
         array,
         document.querySelector("#insertionSortSlowArrayContainer")
     );
 
-    // Get the slow insertion sort modal element
     const modal = document.getElementById("insertionSortSlowModal");
 
-    // Display the modal
     modal.style.display = "block";
 
-    // Start the sorting process asynchronously
     await insertionSortSlow(array, modal);
 
-    // Add event listener to close the modal when clicking outside of it
     window.addEventListener("click", (event) => {
         if (event.target === modal) {
           modal.style.display = "none";
@@ -85,28 +80,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   mergeSortButton.addEventListener("click", async () => {
-    // Show the modal
     const modal = document.getElementById("mergeSortModal");
     modal.style.display = "block";
 
-    const array = generateArray(); // Generate the array
-    const start = performance.now(); // Start measuring time
-    const sortedArray = await mergeSort(array); // Perform merge sort
-    const end = performance.now(); // End measuring time
+    const array = generateArray();
+    const start = performance.now(); 
+    const sortedArray = await mergeSort(array); 
+    const end = performance.now(); 
 
-    // Render the sorted array
     renderArray(
       sortedArray,
       document.querySelector("#mergeSortArrayContainer")
     );
 
-    // Calculate and display the elapsed time
     const elapsedTime = (end - start) / 1000;
     document.getElementById(
       "mergeSortTimer"
     ).textContent = `Time: ${elapsedTime.toFixed(2)}s`;
 
-    // Add event listener to close the modal when clicking outside of it
     window.addEventListener("click", (event) => {
       if (event.target === modal) {
         modal.style.display = "none";
@@ -114,20 +105,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  quickSortButton.addEventListener("click", async () => {
-    // Show the modal
+  quickSortButton.addEventListener("click", async () => {  
     const modal = document.getElementById("quickSortModal");
     modal.style.display = "block";
 
     const arrayContainer = document.querySelector("#quickSortArrayContainer");
     const timerElement = document.querySelector("#quickSortTimer");
     const array = generateArray();
-    console.log("Quick Sort started:", array);
     const startTime = performance.now();
     await quickSort(array, 0, array.length - 1, arrayContainer, timerElement);
-    console.log("Quick Sort finished:", array);
-
-    // Add event listener to close the modal when clicking outside of it
+    
     window.addEventListener("click", (event) => {
       if (event.target === modal) {
         modal.style.display = "none";
@@ -181,38 +168,30 @@ async function sleep(ms) {
 }
 
 async function swapAnimationBubbleSort(i, j) {
-  // Get the array item elements
   const arrayItems = document.querySelectorAll(
     ".bubble-sort-array .array-item"
   );
 
-  // Add class for bubble sort animation
   arrayItems[i].classList.add("bubble-swap-animation");
   arrayItems[j].classList.add("bubble-swap-animation");
 
-  // Wait for a short duration to allow for the animation to start
   await sleep(50);
 
-  // Calculate the distance to move the array items
   const deltaX = arrayItems[j].offsetLeft - arrayItems[i].offsetLeft;
   const deltaY = arrayItems[j].offsetTop - arrayItems[i].offsetTop;
 
-  // Animate the movement of array items
   arrayItems[i].style.transition = "transform 0.3s ease-in-out";
   arrayItems[j].style.transition = "transform 0.3s ease-in-out";
   arrayItems[i].style.transform = `translate(${deltaX}px, ${deltaY}px)`;
   arrayItems[j].style.transform = `translate(-${deltaX}px, -${deltaY}px)`;
 
-  // Wait for the animation to finish
   await sleep(300);
 
-  // Swap the text content of array items
   [arrayItems[i].textContent, arrayItems[j].textContent] = [
     arrayItems[j].textContent,
     arrayItems[i].textContent,
   ];
 
-  // Reset styles and remove class for bubble sort animation
   arrayItems[i].style.transition = "";
   arrayItems[j].style.transition = "";
   arrayItems[i].style.transform = "";
@@ -412,13 +391,12 @@ async function quickSort(
 }
 
 async function partition(arr, left, right, arrayContainer, timerElement) {
-  // Choose a random pivot index within the partition range
+  
   const pivotIndex = Math.floor(Math.random() * (right - left + 1)) + left;
 
-  // Swap the pivot element with the rightmost element
   [arr[pivotIndex], arr[right]] = [arr[right], arr[pivotIndex]];
 
-  let pivot = arr[right]; // Pivot is now the last element of the partition
+  let pivot = arr[right]; 
   let i = left - 1;
 
   for (let j = left; j < right; j++) {
@@ -438,18 +416,14 @@ async function swapQuickSort(arr, i, j, arrayContainer, sortingAlgorithm) {
   arr[i] = arr[j];
   arr[j] = temp;
 
-  // Swap the text content of array items
   arrayItems[i].textContent = arr[i];
   arrayItems[j].textContent = arr[j];
 
-  // Add swap animation class
   arrayItems[i].classList.add("quick-swap-animation");
   arrayItems[j].classList.add("quick-swap-animation");
 
-  // Wait for the animation to finish
   await sleep(300);
 
-  // Remove swap animation class
   arrayItems[i].classList.remove("quick-swap-animation");
   arrayItems[j].classList.remove("quick-swap-animation");
 }
