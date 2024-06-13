@@ -146,27 +146,6 @@ function generateArray() {
 function renderArray(arr, container, useSVG = false) {
   container.innerHTML = ""; // Clear previous content
 
-  if (useSVG) {
-    const draw = SVG().addTo(container).size(800, 150); // Create SVG container
-
-    const rectWidth = 30; // Width of each rectangle representing an array element
-    const rectHeight = 100; // Height of each rectangle
-    const padding = 5; // Padding between rectangles
-
-    arr.forEach((value, index) => {
-      const x = index * (rectWidth + padding); // X position based on index
-      const y = 25; // Y position
-
-      const rect = draw.rect(rectWidth, rectHeight)
-        .move(x, y) // Position the rectangle
-        .fill('#3498db'); // Fill color
-
-      // Text label inside the rectangle
-      draw.text(value.toString())
-        .move(x + rectWidth / 2, y + rectHeight / 2)
-        .attr({ 'text-anchor': 'middle', 'alignment-baseline': 'middle', 'fill': 'white' });
-    });
-  } else {
     arr.forEach((item) => {
       const arrayItem = document.createElement("div");
       arrayItem.className = "array-item";
@@ -174,7 +153,6 @@ function renderArray(arr, container, useSVG = false) {
       container.appendChild(arrayItem);
     });
   }
-}
 
 
 async function sleep(ms) {
@@ -349,8 +327,15 @@ async function merge(left, right) {
   let leftIndex = 0;
   let rightIndex = 0;
 
+  // Canvas initialization
+  const canvas = document.getElementById("mergeSortCanvas");
+  const ctx = canvas.getContext("2d");
+  const canvasWidth = canvas.width;
+  const canvasHeight = canvas.height;
+  const barWidth = canvasWidth / (left.length + right.length);
+
+  // Visualization loop
   while (leftIndex < left.length && rightIndex < right.length) {
-    await renderMergeState(left, right, leftIndex, rightIndex, result);
     if (left[leftIndex] < right[rightIndex]) {
       result.push(left[leftIndex]);
       leftIndex++;
@@ -358,21 +343,35 @@ async function merge(left, right) {
       result.push(right[rightIndex]);
       rightIndex++;
     }
+
+    // Clear canvas and draw current state
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    drawArray(result, ctx, barWidth);
+    await sleep(200); // Adjust timing as needed
   }
 
+  // Append remaining elements
   result = result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
-  await renderMergeState([], [], leftIndex, rightIndex, result);
+
+  // Final rendering
+  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+  drawArray(result, ctx, barWidth);
 
   return result;
 }
 
-async function renderMergeState(left, right, leftIndex, rightIndex, result) {
-  const container = document.querySelector("#mergeSortArrayContainer");
-  const mergedArray = result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
+function drawArray(arr, ctx, barWidth) {
+  const canvasHeight = ctx.canvas.height;
+  const maxValue = Math.max(...arr);
+  const scaleFactor = canvasHeight / maxValue;
 
-  renderArray(mergedArray, container, true); // Use SVG rendering
-  await sleep(200); // Adjust timing as needed
+  arr.forEach((value, index) => {
+    const x = index * barWidth;
+    const barHeight = value * scaleFactor;
+    ctx.fillRect(x, canvasHeight - barHeight, barWidth - 1, barHeight);
+  });
 }
+
 
 
 async function quickSort(

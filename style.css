@@ -124,7 +124,7 @@
     height: 50px;
     margin: 0 5px;
     background-color: lightblue;
-    display: flex;
+    display: inline-block;
     justify-content: center;
     align-items: center;
     border: 1px solid #000;
@@ -223,6 +223,12 @@
 #mergeSort button {
     margin-bottom: 10px;
 }
+
+#mergeSortCanvas {
+    display: block;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+  }
 
 
 /*quickSort*/
