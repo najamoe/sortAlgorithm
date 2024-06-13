@@ -72,8 +72,9 @@
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
-}
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+  }
 
 .modal-content {
     background-color: #fefefe;
@@ -81,6 +82,13 @@
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.timer {
+    margin-top: 10px;
+    font-size: 1.2em;
 }
 
 .close {
@@ -97,17 +105,7 @@
     cursor: pointer;
 }
 
-#bubbleSort {
-    background-color: lightblue;
-}
 
-#insertionSort {
-    background-color: rgb(223, 250, 223);
-}
-
-#mergeSort {
-    background-color: rgb(238, 161, 161);
-}
 
 #quickSort {
     background-color: lightgoldenrodyellow;
@@ -115,44 +113,117 @@
 
 .array-container {
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-}
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
 
 .array-item {
-    flex: 0 0 auto;
+    width: 50px;
+    height: 50px;
+    margin: 0 5px;
+    background-color: lightblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #000;
+    position: relative;
     transition: transform 0.3s ease-in-out;
-    margin: 5px;
-    border: 1px solid black;
-    box-sizing: border-box;
-    padding: 10px;
-    border-radius: 100px;
-}
+  }
 
 /*bubbleSorter*/
+
+#bubbleSort {
+    background-color: lightblue;
+}
 .bubbleCompare {
-    background-color: rgba(255, 255, 6, 0.937); 
-    border-color: rgb(175, 12, 12); 
-    color: black; 
-    font-weight: bold; 
+    background-color: yellow !important;
+  }
+  
+  .bubble-swap-animation {
+    background-color: red !important;
+  }
+  
+  .bubbleSorted {
+    background-color: green !important;
+  }
+  
+  @keyframes swap {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(calc(100% + 10px), 0); }
+    100% { transform: translate(0, 0); }
+  }
+
+  /*insertionSort*/
+  #insertionSort {
+    background-color: rgb(223, 250, 223);
 }
 
-.bubbleSorted {
+/*insertionSortSlow*/
+  #insertionSortSlow {
+    background-color: lightyellow;
+    border: 2px solid black;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+#insertionSortSlow h3 {
+    margin-top: 0;
+}
+
+#insertionSortSlow button {
+    margin-bottom: 10px;
+}
+
+.array-container-insertion {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+#insertionSortSlowArrayContainer .array-item {
+    margin: 0 5px;
+    display: inline-block;
+    padding: 5px;
+    border: 1px solid black;
+    transition: transform 0.6s ease-in-out, background-color 0.6s ease-in-out;
+}
+
+.current-element {
+    background-color: red;
+}
+
+.lifted {
+    transform: translateY(-65px);
+    background-color: yellow;
+}
+
+.moved {
+    transform: translateX(var(--translate-x, 0));
     background-color: green;
-    color: white;
-    font-weight: bold;
+}
+/*mergeSort*/
+#mergeSort {
+    background-color: rgb(238, 161, 161);
+}
+#mergeSort {
+    background-color: rgb(238, 161, 161);
+    border: 2px solid black;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
 }
 
-
-.swap-animation {
-    animation: swap 0.3s ease-in-out;
+#mergeSort h3 {
+    margin-top: 0;
 }
 
-@keyframes swap {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
+#mergeSort button {
+    margin-bottom: 10px;
 }
+
 
 /*quickSort*/
 .quickCompare {
@@ -222,45 +293,7 @@
     }
 }
 
-#insertionSort {
-    background-color: lightyellow;
-    border: 2px solid black;
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-}
 
-#insertionSort h3 {
-    margin-top: 0;
-}
 
-#insertionSort button {
-    margin-bottom: 10px;
-}
 
-.array-container-insertion {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-#insertionSort .array-item {
-    margin-right: 5px;
-    display: inline-block;
-    padding: 5px;
-    border: 1px solid black;
-}
-
-.current-element {
-    background-color: yellow;
-}
-
-.lifted {
-    transition: transform 0.3s ease-in-out;
-    transform: translateY(-40px); 
-}
-
-.array-container-insertion .array-item {
-    transition: transform 0.3s ease-in-out;
-}
 

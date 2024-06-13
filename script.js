@@ -1,13 +1,13 @@
+
+
 document.addEventListener("DOMContentLoaded", () => {
+
+  
   const bubbleSortButton = document.querySelector(".bubbleSortStartButton");
-  const insertionSortButton = document.querySelector(
-    ".insertionSortStartButton"
-  );
+  const insertionSortButton = document.querySelector(".insertionSortStartButton");
   const mergeSortButton = document.querySelector(".mergeSortStartButton");
   const quickSortButton = document.querySelector(".quickSortStartButton");
-  const slowInsertionSortButton = document.querySelector(
-    ".insertionSortSlowStartButton"
-  );
+  const slowInsertionSortButton = document.querySelector(".insertionSortSlowStartButton");
 
   initializeArrayAndTimer("bubbleSort", generateArray());
   initializeArrayAndTimer("insertionSort", generateArray());
@@ -60,44 +60,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
   slowInsertionSortButton.addEventListener("click", async () => {
     const array = generateArray();
-    renderArray(
-        array,
-        document.querySelector("#insertionSortSlowArrayContainer")
-    );
+    renderArray(array, document.querySelector("#insertionSortSlowArrayContainer"));
 
     const modal = document.getElementById("insertionSortSlowModal");
-
     modal.style.display = "block";
 
-    await insertionSortSlow(array, modal);
+    await insertionSortSlow(array);
 
     window.addEventListener("click", (event) => {
         if (event.target === modal) {
           modal.style.display = "none";
         }
       });
-    });
-
+  });
 
   mergeSortButton.addEventListener("click", async () => {
+    const array = generateArray();
+    renderArray(array, document.querySelector("#mergeSortArrayContainer"));
+  
     const modal = document.getElementById("mergeSortModal");
     modal.style.display = "block";
-
-    const array = generateArray();
-    const start = performance.now(); 
-    const sortedArray = await mergeSort(array); 
-    const end = performance.now(); 
-
-    renderArray(
-      sortedArray,
-      document.querySelector("#mergeSortArrayContainer")
-    );
-
-    const elapsedTime = (end - start) / 1000;
-    document.getElementById(
-      "mergeSortTimer"
-    ).textContent = `Time: ${elapsedTime.toFixed(2)}s`;
-
+  
+    const startTime = performance.now();
+    await mergeSort(array);
+    const endTime = performance.now();
+    const elapsedTime = (endTime - startTime) / 1000;
+  
+    document.getElementById("mergeSortTimer").textContent = `Time: ${elapsedTime.toFixed(3)}s`;
+  
     window.addEventListener("click", (event) => {
       if (event.target === modal) {
         modal.style.display = "none";
@@ -122,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-});
+  });
 
 function initializeArrayAndTimer(sortingAlgorithm, array, slow = false) {
   const arrayContainer = document.querySelector(
@@ -153,37 +143,54 @@ function generateArray() {
   return [5, 9, 12, 7, 14, 21, 43, 35, 3];
 }
 
-function renderArray(arr, container) {
-  container.innerHTML = "";
-  arr.forEach((item) => {
-    const arrayItem = document.createElement("div");
-    arrayItem.className = "array-item";
-    arrayItem.textContent = item;
-    container.appendChild(arrayItem);
-  });
+function renderArray(arr, container, useSVG = false) {
+  container.innerHTML = ""; // Clear previous content
+
+  if (useSVG) {
+    const draw = SVG().addTo(container).size(800, 150); // Create SVG container
+
+    const rectWidth = 30; // Width of each rectangle representing an array element
+    const rectHeight = 100; // Height of each rectangle
+    const padding = 5; // Padding between rectangles
+
+    arr.forEach((value, index) => {
+      const x = index * (rectWidth + padding); // X position based on index
+      const y = 25; // Y position
+
+      const rect = draw.rect(rectWidth, rectHeight)
+        .move(x, y) // Position the rectangle
+        .fill('#3498db'); // Fill color
+
+      // Text label inside the rectangle
+      draw.text(value.toString())
+        .move(x + rectWidth / 2, y + rectHeight / 2)
+        .attr({ 'text-anchor': 'middle', 'alignment-baseline': 'middle', 'fill': 'white' });
+    });
+  } else {
+    arr.forEach((item) => {
+      const arrayItem = document.createElement("div");
+      arrayItem.className = "array-item";
+      arrayItem.textContent = item;
+      container.appendChild(arrayItem);
+    });
+  }
 }
+
 
 async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function swapAnimationBubbleSort(i, j) {
-  const arrayItems = document.querySelectorAll(
-    ".bubble-sort-array .array-item"
-  );
+  const arrayItems = document.querySelectorAll(".bubble-sort-array .array-item");
+
+  const deltaX = arrayItems[j].offsetLeft - arrayItems[i].offsetLeft;
 
   arrayItems[i].classList.add("bubble-swap-animation");
   arrayItems[j].classList.add("bubble-swap-animation");
 
-  await sleep(50);
-
-  const deltaX = arrayItems[j].offsetLeft - arrayItems[i].offsetLeft;
-  const deltaY = arrayItems[j].offsetTop - arrayItems[i].offsetTop;
-
-  arrayItems[i].style.transition = "transform 0.3s ease-in-out";
-  arrayItems[j].style.transition = "transform 0.3s ease-in-out";
-  arrayItems[i].style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-  arrayItems[j].style.transform = `translate(-${deltaX}px, -${deltaY}px)`;
+  arrayItems[i].style.transform = `translateX(${deltaX}px)`;
+  arrayItems[j].style.transform = `translateX(-${deltaX}px)`;
 
   await sleep(300);
 
@@ -192,10 +199,9 @@ async function swapAnimationBubbleSort(i, j) {
     arrayItems[i].textContent,
   ];
 
-  arrayItems[i].style.transition = "";
-  arrayItems[j].style.transition = "";
   arrayItems[i].style.transform = "";
   arrayItems[j].style.transform = "";
+
   arrayItems[i].classList.remove("bubble-swap-animation");
   arrayItems[j].classList.remove("bubble-swap-animation");
 }
@@ -273,69 +279,78 @@ async function insertionSort(arr) {
   renderArray(arr, document.querySelector("#insertionSortArrayContainer"));
 }
 
-async function insertionSortSlow(arr, modal) {
-    const startTime = performance.now();
-    const arrayContainer = document.getElementById("insertionSortSlowArrayContainer");
+async function insertionSortSlow(arr) {
+  const startTime = performance.now();
+  const arrayContainer = document.getElementById("insertionSortSlowArrayContainer");
 
-    for (let i = 1; i < arr.length; i++) {
-        let current = arr[i];
-        let j = i - 1;
-        let currentIndex = i;
+  for (let i = 1; i < arr.length; i++) {
+      let current = arr[i];
+      let j = i - 1;
+      let currentIndex = i;
 
-        arrayContainer.children[currentIndex].classList.add("current-element");
-        arrayContainer.children[currentIndex].classList.add("lifted");
-        await sleep(300);
+      const currentElement = arrayContainer.children[currentIndex];
+      currentElement.classList.add("current-element", "lifted");
+      await sleep(300);
 
-        while (j >= 0 && arr[j] > current) {
-            arrayContainer.children[j].style.transform = `translateX(${arrayContainer.children[currentIndex].offsetWidth}px)`;
-            await sleep(300);
+      while (j >= 0 && arr[j] > current) {
+          const movedElement = arrayContainer.children[j];
+          
+          movedElement.classList.add("moved");
+          await sleep(300);
 
-            arr[j + 1] = arr[j];
-            arrayContainer.insertBefore(arrayContainer.children[currentIndex], arrayContainer.children[j]);
+          arr[j + 1] = arr[j];
+          arrayContainer.insertBefore(currentElement, arrayContainer.children[j]);
 
-            j--;
-            await sleep(300);
-        }
+          j--;
+          await sleep(300);
+      }
 
-        arr[j + 1] = current;
-        arrayContainer.children[currentIndex].style.transform = "";
-        arrayContainer.children[currentIndex].classList.remove("lifted");
-        arrayContainer.children[currentIndex].classList.remove("current-element");
-        arrayContainer.style.width = `${(arr.length + 2) * (arrayContainer.children[0].offsetWidth + 54)}px`;
-        renderArray(arr, arrayContainer);
-        await sleep(300);
-    }
+      arr[j + 1] = current;
+      currentElement.classList.remove("lifted", "current-element");
+      currentElement.style.transform = "";
 
-    const endTime = performance.now();
-    const elapsedTime = endTime - startTime;
+      for (let k = 0; k < arrayContainer.children.length; k++) {
+          arrayContainer.children[k].classList.remove("moved");
+          arrayContainer.children[k].style.transform = "";
+      }
 
-    let timeString;
-    if (elapsedTime >= 1000) {
-        const seconds = elapsedTime / 1000;
-        timeString = `${seconds.toFixed(2)}s`;
-    } else {
-        timeString = `${elapsedTime.toFixed(2)}ms`;
-    }
+      renderArray(arr, arrayContainer);
+      await sleep(300);
+  }
 
-    document.getElementById("insertionSortSlowTimer").textContent = `Time: ${timeString}`;
+  const endTime = performance.now();
+  const elapsedTime = endTime - startTime;
+
+  let timeString;
+  if (elapsedTime >= 1000) {
+      const seconds = elapsedTime / 1000;
+      timeString = `${seconds.toFixed(2)}s`;
+  } else {
+      timeString = `${elapsedTime.toFixed(2)}ms`;
+  }
+
+  document.getElementById("insertionSortSlowTimer").textContent = `Time: ${timeString}`;
 }
 
 async function mergeSort(arr) {
   if (arr.length <= 1) {
     return arr;
   }
+
   const middle = Math.floor(arr.length / 2);
-  const left = mergeSort(arr.slice(0, middle));
-  const right = mergeSort(arr.slice(middle));
-  return merge(await left, await right);
+  const left = await mergeSort(arr.slice(0, middle));
+  const right = await mergeSort(arr.slice(middle));
+
+  return await merge(left, right);
 }
 
 async function merge(left, right) {
   let result = [];
   let leftIndex = 0;
   let rightIndex = 0;
+
   while (leftIndex < left.length && rightIndex < right.length) {
-    await renderMergeState(left, right, leftIndex, rightIndex);
+    await renderMergeState(left, right, leftIndex, rightIndex, result);
     if (left[leftIndex] < right[rightIndex]) {
       result.push(left[leftIndex]);
       leftIndex++;
@@ -344,19 +359,21 @@ async function merge(left, right) {
       rightIndex++;
     }
   }
-  return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
+
+  result = result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
+  await renderMergeState([], [], leftIndex, rightIndex, result);
+
+  return result;
 }
 
-async function renderMergeState(left, right, leftIndex, rightIndex) {
+async function renderMergeState(left, right, leftIndex, rightIndex, result) {
   const container = document.querySelector("#mergeSortArrayContainer");
-  const mergedArray = left
-    .slice(0, leftIndex)
-    .concat(right.slice(0, rightIndex))
-    .concat(left.slice(leftIndex))
-    .concat(right.slice(rightIndex));
-  renderArray(mergedArray, container);
-  await sleep(300);
+  const mergedArray = result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
+
+  renderArray(mergedArray, container, true); // Use SVG rendering
+  await sleep(200); // Adjust timing as needed
 }
+
 
 async function quickSort(
   arr,
