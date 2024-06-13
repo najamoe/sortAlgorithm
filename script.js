@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Final drawing of the sorted array
     drawArray(sortedArray, ctx, canvas.width / sortedArray.length);
 
-    document.getElementById("mergeSortTimer").textContent = `Time: ${elapsedTime.toFixed(3)}s`;
+    document.getElementById("mergeSortTimer").textContent = `Time: ${elapsedTime.toFixed(2)}s`;
 
     window.addEventListener("click", (event) => {
       if (event.target === modal) {
@@ -143,26 +143,14 @@ document.addEventListener("DOMContentLoaded", () => {
         slowArrayContainer.className = "array-container";
         slowArrayContainer.id = `${sortingAlgorithm}SlowArrayContainer`;
         document.getElementById(sortingAlgorithm).appendChild(slowArrayContainer);
-  
+    
         const slowTimerElement = document.createElement("div");
         slowTimerElement.className = "timer";
         slowTimerElement.id = `${sortingAlgorithm}SlowTimer`;
         document.getElementById(sortingAlgorithm).appendChild(slowTimerElement);
-  
+    
         renderArray(array, slowArrayContainer);
         slowTimerElement.textContent = "Time: 0.00s";
-  
-        // Create a canvas and draw the array on it for the slow container
-        const slowCanvas = document.createElement('canvas');
-        slowCanvas.width = array.length * 10; // Adjust the width based on the array length
-        slowCanvas.height = 200; // Adjust the height as needed
-        const slowContext = slowCanvas.getContext('2d');
-  
-        // Draw the array on the slow canvas
-        drawArray(array, slowContext, 10);
-  
-        // Append the slow canvas to the slow array container
-        slowArrayContainer.appendChild(slowCanvas);
       }
     }
   }
@@ -378,7 +366,7 @@ function drawArray(arr, ctx, barWidth) {
   arr.forEach((value, index) => {
     const x = index * barWidth;
     const barHeight = value * scaleFactor;
-    ctx.fillStyle = 'black';
+    ctx.fillStyle = 'darkblue';
     ctx.fillRect(x, canvasHeight - barHeight, barWidth - 1, barHeight);
   });
 }
