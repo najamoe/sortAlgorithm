@@ -77,17 +77,26 @@ document.addEventListener("DOMContentLoaded", () => {
   mergeSortButton.addEventListener("click", async () => {
     const array = generateArray();
     renderArray(array, document.querySelector("#mergeSortArrayContainer"));
-  
+
     const modal = document.getElementById("mergeSortModal");
     modal.style.display = "block";
-  
+
+    const canvas = document.getElementById('mergeSortCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Initial drawing of the array
+    drawArray(array, ctx, canvas.width / array.length);
+
     const startTime = performance.now();
-    await mergeSort(array);
+    const sortedArray = await mergeSort(array);
     const endTime = performance.now();
     const elapsedTime = (endTime - startTime) / 1000;
-  
+
+    // Final drawing of the sorted array
+    drawArray(sortedArray, ctx, canvas.width / sortedArray.length);
+
     document.getElementById("mergeSortTimer").textContent = `Time: ${elapsedTime.toFixed(3)}s`;
-  
+
     window.addEventListener("click", (event) => {
       if (event.target === modal) {
         modal.style.display = "none";
@@ -114,31 +123,50 @@ document.addEventListener("DOMContentLoaded", () => {
 
   });
 
-function initializeArrayAndTimer(sortingAlgorithm, array, slow = false) {
-  const arrayContainer = document.querySelector(
-    `#${sortingAlgorithm}ArrayContainer`
-  );
-  const timerElement = document.querySelector(`#${sortingAlgorithm}Timer`);
-
-  renderArray(array, arrayContainer);
-  timerElement.textContent = "Time: 0.00s";
-
-  if (slow) {
-    const slowArrayContainer = document.createElement("div");
-    slowArrayContainer.className = "array-container";
-    slowArrayContainer.id = `${sortingAlgorithm}SlowArrayContainer`;
-    document.getElementById(sortingAlgorithm).appendChild(slowArrayContainer);
-
-    const slowTimerElement = document.createElement("div");
-    slowTimerElement.className = "timer";
-    slowTimerElement.id = `${sortingAlgorithm}SlowTimer`;
-    document.getElementById(sortingAlgorithm).appendChild(slowTimerElement);
-
-    renderArray(array, slowArrayContainer);
-    slowTimerElement.textContent = "Time: 0.00s";
+  function initializeArrayAndTimer(sortingAlgorithm, array, slow = false) {
+    const arrayContainer = document.querySelector(
+      `#${sortingAlgorithm}ArrayContainer`
+    );
+    const timerElement = document.querySelector(`#${sortingAlgorithm}Timer`);
+  
+    renderArray(array, arrayContainer);
+    timerElement.textContent = "Time: 0.00s";
+  
+    if (sortingAlgorithm === 'mergeSort') {
+      const canvas = document.getElementById('mergeSortCanvas');
+      const ctx = canvas.getContext('2d');
+  
+      drawArray(array, ctx, canvas.width / array.length);
+  
+      if (slow) {
+        const slowArrayContainer = document.createElement("div");
+        slowArrayContainer.className = "array-container";
+        slowArrayContainer.id = `${sortingAlgorithm}SlowArrayContainer`;
+        document.getElementById(sortingAlgorithm).appendChild(slowArrayContainer);
+  
+        const slowTimerElement = document.createElement("div");
+        slowTimerElement.className = "timer";
+        slowTimerElement.id = `${sortingAlgorithm}SlowTimer`;
+        document.getElementById(sortingAlgorithm).appendChild(slowTimerElement);
+  
+        renderArray(array, slowArrayContainer);
+        slowTimerElement.textContent = "Time: 0.00s";
+  
+        // Create a canvas and draw the array on it for the slow container
+        const slowCanvas = document.createElement('canvas');
+        slowCanvas.width = array.length * 10; // Adjust the width based on the array length
+        slowCanvas.height = 200; // Adjust the height as needed
+        const slowContext = slowCanvas.getContext('2d');
+  
+        // Draw the array on the slow canvas
+        drawArray(array, slowContext, 10);
+  
+        // Append the slow canvas to the slow array container
+        slowArrayContainer.appendChild(slowCanvas);
+      }
+    }
   }
-}
-
+  
 function generateArray() {
   return [5, 9, 12, 7, 14, 21, 43, 35, 3];
 }
@@ -319,7 +347,7 @@ async function mergeSort(arr) {
   const left = await mergeSort(arr.slice(0, middle));
   const right = await mergeSort(arr.slice(middle));
 
-  return await merge(left, right);
+  return merge(left, right);
 }
 
 async function merge(left, right) {
@@ -327,14 +355,6 @@ async function merge(left, right) {
   let leftIndex = 0;
   let rightIndex = 0;
 
-  // Canvas initialization
-  const canvas = document.getElementById("mergeSortCanvas");
-  const ctx = canvas.getContext("2d");
-  const canvasWidth = canvas.width;
-  const canvasHeight = canvas.height;
-  const barWidth = canvasWidth / (left.length + right.length);
-
-  // Visualization loop
   while (leftIndex < left.length && rightIndex < right.length) {
     if (left[leftIndex] < right[rightIndex]) {
       result.push(left[leftIndex]);
@@ -343,31 +363,22 @@ async function merge(left, right) {
       result.push(right[rightIndex]);
       rightIndex++;
     }
-
-    // Clear canvas and draw current state
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-    drawArray(result, ctx, barWidth);
-    await sleep(200); // Adjust timing as needed
   }
 
-  // Append remaining elements
   result = result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
-
-  // Final rendering
-  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-  drawArray(result, ctx, barWidth);
-
   return result;
 }
-
 function drawArray(arr, ctx, barWidth) {
   const canvasHeight = ctx.canvas.height;
   const maxValue = Math.max(...arr);
   const scaleFactor = canvasHeight / maxValue;
 
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
   arr.forEach((value, index) => {
     const x = index * barWidth;
     const barHeight = value * scaleFactor;
+    ctx.fillStyle = 'black';
     ctx.fillRect(x, canvasHeight - barHeight, barWidth - 1, barHeight);
   });
 }
