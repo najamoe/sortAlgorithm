@@ -99,13 +99,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   mergeExplained.addEventListener("click", () => {
     mergeSortVisual.style.display = "block"; // Show the visual explanation
-  });
-
-  // Close the visual explanation when clicking outside the modal
-  window.addEventListener("click", (event) => {
+    window.addEventListener("click", (event) => {
     if (event.target === mergeSortModal) {
       mergeSortVisual.style.display = "none";
     }
+  }); 
   });
 
   quickSortButton.addEventListener("click", async () => {  
