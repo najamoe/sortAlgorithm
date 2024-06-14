@@ -1,13 +1,10 @@
-
-
 document.addEventListener("DOMContentLoaded", () => {
-
-  
   const bubbleSortButton = document.querySelector(".bubbleSortStartButton");
   const insertionSortButton = document.querySelector(".insertionSortStartButton");
   const mergeSortButton = document.querySelector(".mergeSortStartButton");
   const quickSortButton = document.querySelector(".quickSortStartButton");
   const slowInsertionSortButton = document.querySelector(".insertionSortSlowStartButton");
+  const mergeExplained = document.querySelector("#mergeExplainedBtn");
 
   initializeArrayAndTimer("bubbleSort", generateArray());
   initializeArrayAndTimer("insertionSort", generateArray());
@@ -76,24 +73,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   mergeSortButton.addEventListener("click", async () => {
     const array = generateArray();
-    renderArray(array, document.querySelector("#mergeSortArrayContainer"));
-
     const modal = document.getElementById("mergeSortModal");
     modal.style.display = "block";
 
     const canvas = document.getElementById('mergeSortCanvas');
     const ctx = canvas.getContext('2d');
-
-    // Initial drawing of the array
-    drawArray(array, ctx, canvas.width / array.length);
+    const barWidth = canvas.width / array.length;
+    
+    drawArray(array, ctx, barWidth);
 
     const startTime = performance.now();
-    const sortedArray = await mergeSort(array);
+    const visited = new Array(array.length).fill(false);
+    await mergeSort(array, 0, array.length - 1, ctx, barWidth, visited);
     const endTime = performance.now();
     const elapsedTime = (endTime - startTime) / 1000;
-
-    // Final drawing of the sorted array
-    drawArray(sortedArray, ctx, canvas.width / sortedArray.length);
 
     document.getElementById("mergeSortTimer").textContent = `Time: ${elapsedTime.toFixed(2)}s`;
 
@@ -102,6 +95,17 @@ document.addEventListener("DOMContentLoaded", () => {
         modal.style.display = "none";
       }
     });
+  });
+
+  mergeExplained.addEventListener("click", () => {
+    mergeSortVisual.style.display = "block"; // Show the visual explanation
+  });
+
+  // Close the visual explanation when clicking outside the modal
+  window.addEventListener("click", (event) => {
+    if (event.target === mergeSortModal) {
+      mergeSortVisual.style.display = "none";
+    }
   });
 
   quickSortButton.addEventListener("click", async () => {  
@@ -169,7 +173,6 @@ function renderArray(arr, container, useSVG = false) {
       container.appendChild(arrayItem);
     });
   }
-
 
 async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -326,36 +329,6 @@ async function insertionSortSlow(arr) {
   document.getElementById("insertionSortSlowTimer").textContent = `Time: ${timeString}`;
 }
 
-async function mergeSort(arr) {
-  if (arr.length <= 1) {
-    return arr;
-  }
-
-  const middle = Math.floor(arr.length / 2);
-  const left = await mergeSort(arr.slice(0, middle));
-  const right = await mergeSort(arr.slice(middle));
-
-  return merge(left, right);
-}
-
-async function merge(left, right) {
-  let result = [];
-  let leftIndex = 0;
-  let rightIndex = 0;
-
-  while (leftIndex < left.length && rightIndex < right.length) {
-    if (left[leftIndex] < right[rightIndex]) {
-      result.push(left[leftIndex]);
-      leftIndex++;
-    } else {
-      result.push(right[rightIndex]);
-      rightIndex++;
-    }
-  }
-
-  result = result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
-  return result;
-}
 function drawArray(arr, ctx, barWidth) {
   const canvasHeight = ctx.canvas.height;
   const maxValue = Math.max(...arr);
@@ -366,11 +339,82 @@ function drawArray(arr, ctx, barWidth) {
   arr.forEach((value, index) => {
     const x = index * barWidth;
     const barHeight = value * scaleFactor;
-    ctx.fillStyle = 'darkblue';
+    ctx.fillStyle = 'black';
     ctx.fillRect(x, canvasHeight - barHeight, barWidth - 1, barHeight);
   });
 }
 
+async function drawBars(arr, ctx, barWidth, start, end, visited) {
+  const canvasHeight = ctx.canvas.height;
+  const maxValue = Math.max(...arr);
+  const scaleFactor = canvasHeight / maxValue;
+
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+  // Set default fill style to black
+  ctx.fillStyle = 'black';
+
+  for (let i = 0; i < arr.length; i++) {
+    const x = i * barWidth;
+    const barHeight = arr[i] * scaleFactor;
+    
+    if (!visited[i]) {
+      ctx.fillStyle = "orange";  // green for sorted
+    } else if (i >= start && i <= end) {
+      ctx.fillStyle = '#006d13';  // orange for current sort
+    }
+    
+    ctx.fillRect(x, canvasHeight - barHeight, barWidth - 1, barHeight);
+    
+    // Reset fill style to black for the next iteration
+    ctx.fillStyle = 'black';
+  }
+}
+
+async function mergeSort(arr, start, end, ctx, barWidth, visited) {
+  if (start < end) {
+    let mid = Math.floor((start + end) / 2);
+    await mergeSort(arr, start, mid, ctx, barWidth, visited);
+    await mergeSort(arr, mid + 1, end, ctx, barWidth, visited);
+    await mergeArray(arr, start, mid, end, ctx, barWidth, visited);
+    await drawBars(arr, ctx, barWidth, start, end, visited);
+    await new Promise(resolve => setTimeout(resolve, 1200));  // wait 800ms for visual effect
+  }
+}
+
+async function mergeArray(arr, start, mid, end, ctx, barWidth, visited) {
+  let left = arr.slice(start, mid + 1);
+  let right = arr.slice(mid + 1, end + 1);
+
+  let k = start, i = 0, j = 0;
+
+  while (i < left.length && j < right.length) {
+    if (left[i] <= right[j]) {
+      arr[k] = left[i];
+      i++;
+    } else {
+      arr[k] = right[j];
+      j++;
+    }
+    k++;
+  }
+
+  while (i < left.length) {
+    arr[k] = left[i];
+    i++;
+    k++;
+  }
+
+  while (j < right.length) {
+    arr[k] = right[j];
+    j++;
+    k++;
+  }
+
+  for (let i = start; i <= end; i++) {
+    visited[i] = true;
+  }
+}
 
 
 async function quickSort(

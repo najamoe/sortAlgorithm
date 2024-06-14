@@ -205,6 +205,18 @@
     background-color: green;
 }
 /*mergeSort*/
+
+.visual-explanation {
+    display: none; /* Initially hide the visual explanation */
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .visual-explanation img {
+    max-width: 100%; 
+  }
+
+  
 #mergeSort {
     background-color: rgb(238, 161, 161);
     border: 2px solid black;
@@ -257,7 +269,13 @@
 
 }
 
+.merge-sorted {
+    background-color: green;
+  }
 
+  .merge-current {
+    background-color: orange;
+  }
 /*quickSort*/
 .quickCompare {
     background-color: rgba(255, 255, 6, 0.937); 
